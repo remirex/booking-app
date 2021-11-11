@@ -16,4 +16,12 @@ export default {
   logs: {
     level: process.env.LOG_LEVEL || 'silly',
   },
+
+  mongo: {
+    mongoUsername: process.env.MONGO_USERNAME,
+    mongoPassword: process.env.MONGO_PASSWORD,
+    mongoHostname: process.env.MONGO_HOSTNAME,
+    mongoPort: process.env.MONGO_PORT,
+    mongoDatabase: process.env.MONGO_DB,
+  },
 };
