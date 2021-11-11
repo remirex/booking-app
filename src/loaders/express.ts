@@ -1,6 +1,9 @@
 import express from 'express';
 import cors from 'cors';
 
+import routes from '../api';
+import config from '../config';
+
 export default ({ app }: { app: express.Application }) => {
   /**
    * Health Check endpoints
@@ -29,4 +32,7 @@ export default ({ app }: { app: express.Application }) => {
 
   // Transforms the raw string of req.body into json
   app.use(express.json());
+
+  // Routes
+  app.use(config.api.prefix, routes());
 };

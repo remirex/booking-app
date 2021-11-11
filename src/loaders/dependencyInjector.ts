@@ -7,7 +7,6 @@ export default ({ mongoConnection, models }: { mongoConnection; models: { name: 
     models.forEach(m => {
       Container.set(m.name, m.model);
     });
-
   } catch (e) {
     LoggerInstance.error('🔥 Error on dependency injector loader: %o', e);
     throw e;
