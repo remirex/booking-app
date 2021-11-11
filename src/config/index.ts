@@ -24,4 +24,8 @@ export default {
     mongoPort: process.env.MONGO_PORT,
     mongoDatabase: process.env.MONGO_DB,
   },
+
+  api: {
+    prefix: '/api/v1',
+  },
 };
