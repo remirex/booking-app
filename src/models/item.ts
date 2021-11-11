@@ -1,11 +1,19 @@
 import mongoose from 'mongoose';
 import slugify from 'slugify';
 
+import { IItem } from '@/interfaces/IItem';
+
 const schema = new mongoose.Schema({
   name: {
     type: String,
     required: true,
   },
+  slug: {
+    type: String,
+    unique: true,
+  }
+}, {
+  timestamps: true,
 });
 
 schema.pre('save', async function (done) {
@@ -14,4 +22,4 @@ schema.pre('save', async function (done) {
   done();
 });
 
-export default mongoose.model('Item', schema);
+export default mongoose.model<IItem & mongoose.Document>('Item', schema);
