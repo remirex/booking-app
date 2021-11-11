@@ -1,10 +1,10 @@
 import mongoose from 'mongoose';
 import slugify from 'slugify';
 
-import AlreadyExistException from "@/api/exceptions/AlreadyExistException";
-import CannotCreateRecordException from "@/api/exceptions/CannotCreateRecordException";
-import WrongObjectIdException from "@/api/exceptions/WrongObjectIdException";
-import NotFoundException from "@/api/exceptions/NotFoundException";
+import AlreadyExistException from '@/api/exceptions/AlreadyExistException';
+import CannotCreateRecordException from '@/api/exceptions/CannotCreateRecordException';
+import WrongObjectIdException from '@/api/exceptions/WrongObjectIdException';
+import NotFoundException from '@/api/exceptions/NotFoundException';
 
 export default class Generic {
   private readonly model;
@@ -24,7 +24,7 @@ export default class Generic {
   }
 
   public async getById(id: string) {
-    const valid = isValid(id);
+    const valid = await isValid(id);
     if (!valid) throw new WrongObjectIdException();
 
     const item = await this.model.findById(id);
@@ -33,9 +33,37 @@ export default class Generic {
     return item;
   }
 
-  public async update() {}
+  public async update(
+    id: string,
+    data: any,
+    isUpdate: boolean,
+    isUnique: boolean,
+    search_field: string,
+    search_value: any,
+  ) {
+    const valid = await isValid(id);
+    if (!valid) throw new WrongObjectIdException();
 
-  public async delete() {}
+    const exist = await isExist(this.model, isUpdate, isUnique, search_field, search_value);
+    if (exist) throw new AlreadyExistException(search_value);
+
+    if (isUnique) data[search_field] = slugify(search_value, { lower: true });
+
+    const item = await this.model.findByIdAndUpdate(id, { ...data }, { new: true });
+    if (!item) throw new NotFoundException();
+
+    return item;
+  }
+
+  public async delete(id: string) {
+    const valid = await isValid(id);
+    if (!valid) throw new WrongObjectIdException();
+
+    const item = await this.model.findByIdAndRemove(id);
+    if (!item) throw new NotFoundException();
+
+    return true;
+  }
 }
 
 async function isValid(id: string) {

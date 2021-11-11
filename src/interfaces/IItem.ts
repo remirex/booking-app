@@ -5,3 +5,8 @@ export interface IItem {
 export interface IItemInputDTO {
   name: string;
 }
+
+export interface IItemUpdateDTO {
+  name: string;
+  slug: string;
+}

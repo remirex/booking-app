@@ -3,18 +3,21 @@ import slugify from 'slugify';
 
 import { IItem } from '@/interfaces/IItem';
 
-const schema = new mongoose.Schema({
-  name: {
-    type: String,
-    required: true,
+const schema = new mongoose.Schema(
+  {
+    name: {
+      type: String,
+      required: true,
+    },
+    slug: {
+      type: String,
+      unique: true,
+    },
   },
-  slug: {
-    type: String,
-    unique: true,
-  }
-}, {
-  timestamps: true,
-});
+  {
+    timestamps: true,
+  },
+);
 
 schema.pre('save', async function (done) {
   const slugItemName = slugify(this.get('name'), { lower: true });
