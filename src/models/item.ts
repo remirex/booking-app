@@ -17,8 +17,8 @@ const schema = new mongoose.Schema({
 });
 
 schema.pre('save', async function (done) {
-  const slugBrandName = slugify(this.get('name'), { lower: true });
-  this.set('slug', slugBrandName);
+  const slugItemName = slugify(this.get('name'), { lower: true });
+  this.set('slug', slugItemName);
   done();
 });
 

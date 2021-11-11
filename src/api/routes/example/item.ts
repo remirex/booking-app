@@ -3,6 +3,7 @@ import { Container } from 'typedi';
 
 import Item from '@/services/item';
 import { IItemInputDTO } from '@/interfaces/IItem';
+import request from '../../requests';
 
 const route = Router();
 
@@ -11,7 +12,7 @@ export default (app: Router) => {
 
   const itemServiceInstance = Container.get(Item);
 
-  route.post('/create', async (req: Request, res: Response, next: NextFunction) => {
+  route.post('/create', request.createItemSchema, async (req: Request, res: Response, next: NextFunction) => {
     try {
       const response = await itemServiceInstance.createItem(req.body as IItemInputDTO);
       return res.status(201).json(response);
