@@ -1,7 +1,7 @@
 import { Inject, Service } from 'typedi';
 
 import Generic from '@/services/generic';
-import { IItemInputDTO, IItemUpdateDTO } from '@/interfaces/IItem';
+import { IItemInputDTO } from '@/interfaces/IItem';
 
 @Service()
 export default class Item extends Generic {
@@ -17,7 +17,7 @@ export default class Item extends Generic {
     return this.getById(itemId);
   }
 
-  public async updateItem(itemId: string, updateData: IItemUpdateDTO) {
+  public async updateItem(itemId: string, updateData: IItemInputDTO) {
     return this.update(itemId, updateData, true, true, 'slug', updateData.name);
   }
 
