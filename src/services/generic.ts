@@ -13,9 +13,11 @@ export default class Generic {
     this.model = model;
   }
 
-  public async create(data: any, isUpdate: boolean, isUnique: boolean, search_field: string, search_value: any) {
-    const exist = await isExist(this.model, isUpdate, isUnique, search_field, search_value);
-    if (exist) throw new AlreadyExistException(search_value);
+  public async create(data: any, isUpdate: boolean, isUnique: boolean, search_field?: string, search_value?: any) {
+    if (isUnique) {
+      const exist = await isExist(this.model, isUpdate, isUnique, search_field, search_value);
+      if (exist) throw new AlreadyExistException(search_value);
+    }
 
     const record = await this.model.create({ ...data });
     if (!record) throw new CannotCreateRecordException();
