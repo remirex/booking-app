@@ -1,4 +1,4 @@
-import HttpException from '@/api/exceptions/httpException';
+import HttpException from './httpException';
 
 class CannotCreateRecordException extends HttpException {
   constructor() {

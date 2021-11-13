@@ -1,0 +1,185 @@
+{
+	"components": {
+		"examples": {},
+		"headers": {},
+		"parameters": {},
+		"requestBodies": {},
+		"responses": {},
+		"schemas": {
+			"IRoomInputDTO": {
+				"properties": {
+					"name": {
+						"type": "string"
+					},
+					"floor": {
+						"type": "number",
+						"format": "double"
+					},
+					"capacity": {
+						"type": "number",
+						"format": "double"
+					},
+					"assets": {
+						"properties": {
+							"bathroom": {
+								"properties": {
+									"cleaningProducts": {
+										"type": "boolean"
+									},
+									"showerGel": {
+										"type": "boolean"
+									},
+									"hotWater": {
+										"type": "boolean"
+									},
+									"bodySoap": {
+										"type": "boolean"
+									},
+									"conditioner": {
+										"type": "boolean"
+									},
+									"shampoo": {
+										"type": "boolean"
+									},
+									"hairDryer": {
+										"type": "boolean"
+									},
+									"bathtub": {
+										"type": "boolean"
+									}
+								},
+								"type": "object"
+							},
+							"kitchenAndDining": {
+								"properties": {
+									"barbecueUtensils": {
+										"type": "boolean"
+									},
+									"oven": {
+										"type": "boolean"
+									},
+									"cookingBasics": {
+										"type": "boolean"
+									},
+									"diningTable": {
+										"type": "boolean"
+									},
+									"trashCompactor": {
+										"type": "boolean"
+									},
+									"toaster": {
+										"type": "boolean"
+									},
+									"wineGlasses": {
+										"type": "boolean"
+									},
+									"coffeeMaker": {
+										"type": "boolean"
+									},
+									"hotWaterKettle": {
+										"type": "boolean"
+									},
+									"stove": {
+										"type": "boolean"
+									},
+									"dishwasher": {
+										"type": "boolean"
+									},
+									"freezer": {
+										"type": "boolean"
+									},
+									"dishesAndSilverware": {
+										"type": "boolean"
+									},
+									"microwave": {
+										"type": "boolean"
+									},
+									"refrigerator": {
+										"type": "boolean"
+									},
+									"kitchen": {
+										"type": "boolean"
+									}
+								},
+								"type": "object"
+							}
+						},
+						"type": "object"
+					}
+				},
+				"required": [
+					"name",
+					"floor"
+				],
+				"type": "object",
+				"additionalProperties": false,
+				"example": {
+					"name": "New room",
+					"floor": 4,
+					"capacity": 4,
+					"assets": {
+						"kitchenAndDining": {
+							"kitchen": true,
+							"microwave": true,
+							"dishwasher": true,
+							"coffeeMaker": true
+						}
+					}
+				}
+			}
+		},
+		"securitySchemes": {
+			"jwt": {
+				"type": "http",
+				"scheme": "bearer",
+				"description": "JWT Authorization header using the Bearer scheme.\n\nEnter your token in the text input below.\n\n Example: \"12345abcdef\"\n\n Name: Authorization\n\nIn: header"
+			}
+		}
+	},
+	"info": {
+		"title": "booking-room-app",
+		"version": "1.0.0",
+		"license": {
+			"name": "ISC"
+		},
+		"contact": {}
+	},
+	"openapi": "3.0.0",
+	"paths": {
+		"/room/add": {
+			"post": {
+				"operationId": "AddNewRoom",
+				"responses": {
+					"201": {
+						"description": "Created",
+						"content": {
+							"application/json": {
+								"schema": {}
+							}
+						}
+					}
+				},
+				"tags": [
+					"Rooms"
+				],
+				"security": [],
+				"parameters": [],
+				"requestBody": {
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/IRoomInputDTO"
+							}
+						}
+					}
+				}
+			}
+		}
+	},
+	"servers": [
+		{
+			"url": "/api/v1"
+		}
+	]
+}

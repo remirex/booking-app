@@ -1,4 +1,4 @@
-import validation from '@/api/middleware/validation';
+import validation from './validation';
 
 export default {
   validation,

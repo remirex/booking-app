@@ -1,7 +1,8 @@
 import express from 'express';
 import cors from 'cors';
+import swaggerUi from 'swagger-ui-express';
 
-import errorMiddleware from '@/api/middleware/error';
+import errorMiddleware from '../api/middleware/error';
 import routes from '../api';
 import config from '../config';
 
@@ -33,6 +34,19 @@ export default ({ app }: { app: express.Application }) => {
 
   // Transforms the raw string of req.body into json
   app.use(express.json());
+
+  app.use(express.static('public'));
+
+  // Swagger
+  app.use(
+    '/docs',
+    swaggerUi.serve,
+    swaggerUi.setup(undefined, {
+      swaggerOptions: {
+        url: '/swagger.json',
+      },
+    }),
+  );
 
   // Routes
   app.use(config.api.prefix, routes());

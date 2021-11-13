@@ -1,6 +1,6 @@
 import { Document, Model } from 'mongoose';
 import { IItem } from '@/interfaces/IItem';
-import { IRoom } from "@/interfaces/IRoom";
+import { IRoom } from '@/interfaces/IRoom';
 
 declare global {
   namespace Models {

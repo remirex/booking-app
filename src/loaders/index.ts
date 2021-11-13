@@ -16,7 +16,7 @@ export default async ({ expressApp }) => {
   const roomModel = {
     name: 'roomModel',
     model: require('../models/room').default,
-  }
+  };
 
   await dependencyInjectorLoader({
     mongoConnection,

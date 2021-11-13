@@ -1,8 +1,8 @@
 import { NextFunction, Request, Response, Router } from 'express';
 import { Container } from 'typedi';
 
-import Item from '@/services/item';
-import { IItemInputDTO } from '@/interfaces/IItem';
+import Item from '../../../services/item';
+import { IItemInputDTO } from '../../../interfaces/IItem';
 import request from '../../requests';
 
 const route = Router();
