@@ -7,6 +7,8 @@ import WrongObjectIdException from '../api/exceptions/WrongObjectIdException';
 import NotFoundException from '../api/exceptions/NotFoundException';
 import { SuccessCreateResponse } from "../types/successCreateResponse";
 
+import Room from '../models/room';
+
 export default class Generic {
   private readonly model;
 
@@ -21,6 +23,7 @@ export default class Generic {
     }
 
     const record = await this.model.create({ ...data });
+    //const record = await Room.create({ ...data });
     if (!record) throw new CannotCreateRecordException();
 
     return record;
