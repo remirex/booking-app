@@ -5,6 +5,7 @@ import AlreadyExistException from '../api/exceptions/AlreadyExistException';
 import CannotCreateRecordException from '../api/exceptions/CannotCreateRecordException';
 import WrongObjectIdException from '../api/exceptions/WrongObjectIdException';
 import NotFoundException from '../api/exceptions/NotFoundException';
+import { SuccessCreateResponse } from "../types/successCreateResponse";
 
 export default class Generic {
   private readonly model;

@@ -4,21 +4,6 @@ export interface IRoom {
   capacity: number;
 }
 
-/**
- * @example {
- *   "name": "New room",
- *   "floor": 4,
- *   "capacity": 4,
- *   "assets": {
- *     "kitchenAndDining": {
- *       "kitchen": true,
- *       "microwave": true,
- *       "dishwasher": true,
- *       "coffeeMaker": true
- *     }
- *   }
- * }
- */
 export interface IRoomInputDTO {
   name: string;
   floor: number;

@@ -6,6 +6,74 @@
 		"requestBodies": {},
 		"responses": {},
 		"schemas": {
+			"SuccessCreateResponse": {
+				"properties": {},
+				"type": "object",
+				"additionalProperties": {}
+			},
+			"Field": {
+				"properties": {
+					"label": {
+						"type": "string"
+					},
+					"value": {
+						"type": "string"
+					},
+					"key": {
+						"type": "string"
+					}
+				},
+				"required": [
+					"label",
+					"value",
+					"key"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"Error": {
+				"properties": {
+					"message": {
+						"type": "string"
+					},
+					"field": {
+						"$ref": "#/components/schemas/Field"
+					}
+				},
+				"required": [
+					"message",
+					"field"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"ValidationErrorResponse": {
+				"properties": {
+					"name": {
+						"type": "string"
+					},
+					"message": {
+						"type": "string"
+					},
+					"status": {
+						"type": "boolean"
+					},
+					"errors": {
+						"items": {
+							"$ref": "#/components/schemas/Error"
+						},
+						"type": "array"
+					}
+				},
+				"required": [
+					"name",
+					"message",
+					"status",
+					"errors"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
 			"IRoomInputDTO": {
 				"properties": {
 					"name": {
@@ -112,20 +180,7 @@
 					"floor"
 				],
 				"type": "object",
-				"additionalProperties": false,
-				"example": {
-					"name": "New room",
-					"floor": 4,
-					"capacity": 4,
-					"assets": {
-						"kitchenAndDining": {
-							"kitchen": true,
-							"microwave": true,
-							"dishwasher": true,
-							"coffeeMaker": true
-						}
-					}
-				}
+				"additionalProperties": false
 			}
 		},
 		"securitySchemes": {
@@ -154,7 +209,38 @@
 						"description": "Created",
 						"content": {
 							"application/json": {
-								"schema": {}
+								"schema": {
+									"$ref": "#/components/schemas/SuccessCreateResponse"
+								}
+							}
+						}
+					},
+					"422": {
+						"description": "Validation Failed",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/ValidationErrorResponse"
+								},
+								"examples": {
+									"Example 1": {
+										"value": {
+											"name": "Validation Error.",
+											"message": "Some fields are not valid.",
+											"status": false,
+											"errors": [
+												{
+													"message": "name is not allowed to be empty",
+													"field": {
+														"label": "name",
+														"value": "",
+														"key": "name"
+													}
+												}
+											]
+										}
+									}
+								}
 							}
 						}
 					}
