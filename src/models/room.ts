@@ -1,5 +1,5 @@
 import mongoose from 'mongoose';
-import { IRoom } from '@/interfaces/IRoom';
+import { IRoom } from '../interfaces/IRoom';
 
 const schema = new mongoose.Schema(
   {

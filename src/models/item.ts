@@ -1,7 +1,7 @@
 import mongoose from 'mongoose';
 import slugify from 'slugify';
 
-import { IItem } from '@/interfaces/IItem';
+import { IItem } from '../interfaces/IItem';
 
 const schema = new mongoose.Schema(
   {

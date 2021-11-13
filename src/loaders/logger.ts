@@ -2,7 +2,7 @@ import winston from 'winston';
 
 import config from '../config';
 
-const transports = [];
+const transports = [] as any;
 if (process.env.NODE_ENV !== 'development') {
   transports.push(new winston.transports.Console());
 } else {

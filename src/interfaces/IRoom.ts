@@ -4,12 +4,27 @@ export interface IRoom {
   capacity: number;
 }
 
+/**
+ * @example {
+ *   "name": "New room",
+ *   "floor": 4,
+ *   "capacity": 4,
+ *   "assets": {
+ *     "kitchenAndDining": {
+ *       "kitchen": true,
+ *       "microwave": true,
+ *       "dishwasher": true,
+ *       "coffeeMaker": true
+ *     }
+ *   }
+ * }
+ */
 export interface IRoomInputDTO {
   name: string;
   floor: number;
   capacity?: number;
-  assets: {
-    kitchenAndDining: {
+  assets?: {
+    kitchenAndDining?: {
       kitchen?: boolean;
       refrigerator?: boolean;
       microwave?: boolean;
@@ -26,8 +41,8 @@ export interface IRoomInputDTO {
       cookingBasics?: boolean;
       oven?: boolean;
       barbecueUtensils?: boolean;
-    },
-    bathroom: {
+    };
+    bathroom?: {
       bathtub?: boolean;
       hairDryer?: boolean;
       shampoo?: boolean;
@@ -36,6 +51,6 @@ export interface IRoomInputDTO {
       hotWater?: boolean;
       showerGel?: boolean;
       cleaningProducts?: boolean;
-    }
-  }
+    };
+  };
 }

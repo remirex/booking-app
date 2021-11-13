@@ -1,4 +1,4 @@
-import { createItemSchema } from '@/api/requests/item/create';
+import { createItemSchema } from './item/create';
 
 export default {
   createItemSchema,

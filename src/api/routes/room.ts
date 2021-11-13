@@ -1,8 +1,8 @@
 import { NextFunction, Request, Response, Router } from 'express';
 import { Container } from 'typedi';
 
-import Room from '@/services/room';
-import { IRoomInputDTO } from '@/interfaces/IRoom';
+import Room from '../../services/room';
+import { IRoomInputDTO } from '../../interfaces/IRoom';
 
 const route = Router();
 
@@ -19,4 +19,4 @@ export default (app: Router) => {
       return next(err);
     }
   });
-}
+};

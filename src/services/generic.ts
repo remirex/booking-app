@@ -1,10 +1,10 @@
 import mongoose from 'mongoose';
 import slugify from 'slugify';
 
-import AlreadyExistException from '@/api/exceptions/AlreadyExistException';
-import CannotCreateRecordException from '@/api/exceptions/CannotCreateRecordException';
-import WrongObjectIdException from '@/api/exceptions/WrongObjectIdException';
-import NotFoundException from '@/api/exceptions/NotFoundException';
+import AlreadyExistException from '../api/exceptions/AlreadyExistException';
+import CannotCreateRecordException from '../api/exceptions/CannotCreateRecordException';
+import WrongObjectIdException from '../api/exceptions/WrongObjectIdException';
+import NotFoundException from '../api/exceptions/NotFoundException';
 
 export default class Generic {
   private readonly model;
@@ -15,7 +15,7 @@ export default class Generic {
 
   public async create(data: any, isUpdate: boolean, isUnique: boolean, search_field?: string, search_value?: any) {
     if (isUnique) {
-      const exist = await isExist(this.model, isUpdate, isUnique, search_field, search_value);
+      const exist = await isExist(this.model, isUpdate, isUnique, search_field!, search_value);
       if (exist) throw new AlreadyExistException(search_value);
     }
 
@@ -79,7 +79,7 @@ async function isExist(
   search_field: string,
   search_value: any,
 ) {
-  const queryObj = {};
+  const queryObj: any = {};
   if (search_field !== '' && search_value !== '') {
     queryObj[search_field] = isUnique ? slugify(search_value, { lower: true }) : search_value;
   }

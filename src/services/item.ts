@@ -1,7 +1,7 @@
 import { Inject, Service } from 'typedi';
 
-import Generic from '@/services/generic';
-import { IItemInputDTO } from '@/interfaces/IItem';
+import Generic from '../services/generic';
+import { IItemInputDTO } from '../interfaces/IItem';
 
 @Service()
 export default class Item extends Generic {

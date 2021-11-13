@@ -1,4 +1,4 @@
-import HttpException from '@/api/exceptions/httpException';
+import HttpException from './httpException';
 
 class AlreadyExistException extends HttpException {
   constructor(name: string) {
