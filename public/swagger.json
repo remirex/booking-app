@@ -6,11 +6,6 @@
 		"requestBodies": {},
 		"responses": {},
 		"schemas": {
-			"SuccessCreateResponse": {
-				"properties": {},
-				"type": "object",
-				"additionalProperties": {}
-			},
 			"Field": {
 				"properties": {
 					"label": {
@@ -89,6 +84,115 @@
 					},
 					"assets": {
 						"properties": {
+							"parkingAndFacilities": {
+								"properties": {
+									"paidParkingGarageOffPremises": {
+										"type": "boolean"
+									},
+									"paidParkingGarageOnPremises": {
+										"type": "boolean"
+									},
+									"evCharger": {
+										"type": "boolean"
+									},
+									"privateGym": {
+										"type": "boolean"
+									},
+									"gym": {
+										"type": "boolean"
+									},
+									"elevator": {
+										"type": "boolean"
+									}
+								},
+								"type": "object"
+							},
+							"entertainment": {
+								"properties": {
+									"exerciseEquipment": {
+										"type": "boolean"
+									},
+									"bluetoothSoundSystem": {
+										"type": "boolean"
+									},
+									"booksAndReadingMaterial": {
+										"type": "boolean"
+									},
+									"gameConsole": {
+										"type": "boolean"
+									},
+									"tv": {
+										"type": "boolean"
+									}
+								},
+								"type": "object"
+							},
+							"internetAndOffice": {
+								"properties": {
+									"dedicatedWorkspace": {
+										"type": "boolean"
+									},
+									"wiFi": {
+										"type": "boolean"
+									}
+								},
+								"type": "object"
+							},
+							"bedroomAndLaundry": {
+								"properties": {
+									"clothingStorage": {
+										"type": "boolean"
+									},
+									"iron": {
+										"type": "boolean"
+									},
+									"roomDarkeningShades": {
+										"type": "boolean"
+									},
+									"extraPillowsAndBlankets": {
+										"type": "boolean"
+									},
+									"bedLinens": {
+										"type": "boolean"
+									},
+									"hangers": {
+										"type": "boolean"
+									},
+									"essentials": {
+										"type": "boolean"
+									},
+									"dryer": {
+										"type": "boolean"
+									},
+									"washer": {
+										"type": "boolean"
+									}
+								},
+								"type": "object"
+							},
+							"heatingAndCooling": {
+								"properties": {
+									"radiantHeating": {
+										"type": "boolean"
+									},
+									"ceilingFan": {
+										"type": "boolean"
+									},
+									"indoorFireplace": {
+										"type": "boolean"
+									},
+									"heating": {
+										"type": "boolean"
+									},
+									"portableFans": {
+										"type": "boolean"
+									},
+									"airConditioning": {
+										"type": "boolean"
+									}
+								},
+								"type": "object"
+							},
 							"bathroom": {
 								"properties": {
 									"cleaningProducts": {
@@ -209,9 +313,7 @@
 						"description": "Created",
 						"content": {
 							"application/json": {
-								"schema": {
-									"$ref": "#/components/schemas/SuccessCreateResponse"
-								}
+								"schema": {}
 							}
 						}
 					},

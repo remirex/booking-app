@@ -114,6 +114,128 @@ const schema = new mongoose.Schema(
           default: false,
         },
       },
+      heatingAndCooling: {
+        airConditioning: {
+          type: Boolean,
+          default: false,
+        },
+        portableFans: {
+          type: Boolean,
+          default: false,
+        },
+        heating: {
+          type: Boolean,
+          default: false,
+        },
+        indoorFireplace: {
+          type: Boolean,
+          default: false,
+        },
+        ceilingFan: {
+          type: Boolean,
+          default: false,
+        },
+        radiantHeating: {
+          type: Boolean,
+          default: false,
+        },
+      },
+      bedroomAndLaundry: {
+        washer: {
+          type: Boolean,
+          default: false,
+        },
+        dryer: {
+          type: Boolean,
+          default: false,
+        },
+        essentials: {
+          type: Boolean,
+          default: false,
+        },
+        hangers: {
+          type: Boolean,
+          default: false,
+        },
+        bedLinens: {
+          type: Boolean,
+          default: false,
+        },
+        extraPillowsAndBlankets: {
+          type: Boolean,
+          default: false,
+        },
+        roomDarkeningShades: {
+          type: Boolean,
+          default: false,
+        },
+        iron: {
+          type: Boolean,
+          default: false,
+        },
+        clothingStorage: {
+          type: Boolean,
+          default: false,
+        },
+      },
+      internetAndOffice: {
+        wiFi: {
+          type: Boolean,
+          default: false,
+        },
+        dedicatedWorkspace: {
+          type: Boolean,
+          default: false,
+        },
+      },
+      entertainment: {
+        tv: {
+          type: Boolean,
+          default: false,
+        },
+        gameConsole: {
+          type: Boolean,
+          default: false,
+        },
+        booksAndReadingMaterial: {
+          type: Boolean,
+          default: false,
+        },
+        bluetoothSoundSystem: {
+          type: Boolean,
+          default: false,
+        },
+        exerciseEquipment: {
+          type: Boolean,
+          default: false,
+        },
+      },
+      parkingAndFacilities: {
+        elevator: {
+          type: Boolean,
+          default: false,
+        },
+        gym: {
+          type: Boolean,
+          default: false,
+        },
+        privateGym: {
+          type: Boolean,
+          default: false,
+        },
+        evCharger: {
+          type: Boolean,
+          default: false,
+        },
+        paidParkingGarageOnPremises: {
+          type: Boolean,
+          default: false,
+        },
+        paidParkingGarageOffPremises: {
+          type: Boolean,
+          default: false,
+        },
+      },
     },
   },
   {
