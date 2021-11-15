@@ -13,6 +13,10 @@ module.exports =  {
     '@typescript-eslint/explicit-member-accessibility': 0,
     '@typescript-eslint/explicit-function-return-type': 0,
     '@typescript-eslint/no-parameter-properties': 0,
-    '@typescript-eslint/interface-name-prefix': 0
+    '@typescript-eslint/interface-name-prefix': 0,
+    '@typescript-eslint/no-explicit-any': 0, // for unexpected any error
+    '@typescript-eslint/no-var-requires': 0, // for unexpected any error
+    '@typescript-eslint/no-unused-vars': 0, // no used var
+    '@typescript-eslint/no-non-null-assertion': 0, // no non null assertion
   },
 };

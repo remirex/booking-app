@@ -1,0 +1,373 @@
+{
+	"components": {
+		"examples": {},
+		"headers": {},
+		"parameters": {},
+		"requestBodies": {},
+		"responses": {},
+		"schemas": {
+			"Field": {
+				"properties": {
+					"label": {
+						"type": "string"
+					},
+					"value": {
+						"type": "string"
+					},
+					"key": {
+						"type": "string"
+					}
+				},
+				"required": [
+					"label",
+					"value",
+					"key"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"Error": {
+				"properties": {
+					"message": {
+						"type": "string"
+					},
+					"field": {
+						"$ref": "#/components/schemas/Field"
+					}
+				},
+				"required": [
+					"message",
+					"field"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"ValidationErrorResponse": {
+				"properties": {
+					"name": {
+						"type": "string"
+					},
+					"message": {
+						"type": "string"
+					},
+					"status": {
+						"type": "boolean"
+					},
+					"errors": {
+						"items": {
+							"$ref": "#/components/schemas/Error"
+						},
+						"type": "array"
+					}
+				},
+				"required": [
+					"name",
+					"message",
+					"status",
+					"errors"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"IRoomInputDTO": {
+				"properties": {
+					"name": {
+						"type": "string"
+					},
+					"floor": {
+						"type": "number",
+						"format": "double"
+					},
+					"capacity": {
+						"type": "number",
+						"format": "double"
+					},
+					"assets": {
+						"properties": {
+							"parkingAndFacilities": {
+								"properties": {
+									"paidParkingGarageOffPremises": {
+										"type": "boolean"
+									},
+									"paidParkingGarageOnPremises": {
+										"type": "boolean"
+									},
+									"evCharger": {
+										"type": "boolean"
+									},
+									"privateGym": {
+										"type": "boolean"
+									},
+									"gym": {
+										"type": "boolean"
+									},
+									"elevator": {
+										"type": "boolean"
+									}
+								},
+								"type": "object"
+							},
+							"entertainment": {
+								"properties": {
+									"exerciseEquipment": {
+										"type": "boolean"
+									},
+									"bluetoothSoundSystem": {
+										"type": "boolean"
+									},
+									"booksAndReadingMaterial": {
+										"type": "boolean"
+									},
+									"gameConsole": {
+										"type": "boolean"
+									},
+									"tv": {
+										"type": "boolean"
+									}
+								},
+								"type": "object"
+							},
+							"internetAndOffice": {
+								"properties": {
+									"dedicatedWorkspace": {
+										"type": "boolean"
+									},
+									"wiFi": {
+										"type": "boolean"
+									}
+								},
+								"type": "object"
+							},
+							"bedroomAndLaundry": {
+								"properties": {
+									"clothingStorage": {
+										"type": "boolean"
+									},
+									"iron": {
+										"type": "boolean"
+									},
+									"roomDarkeningShades": {
+										"type": "boolean"
+									},
+									"extraPillowsAndBlankets": {
+										"type": "boolean"
+									},
+									"bedLinens": {
+										"type": "boolean"
+									},
+									"hangers": {
+										"type": "boolean"
+									},
+									"essentials": {
+										"type": "boolean"
+									},
+									"dryer": {
+										"type": "boolean"
+									},
+									"washer": {
+										"type": "boolean"
+									}
+								},
+								"type": "object"
+							},
+							"heatingAndCooling": {
+								"properties": {
+									"radiantHeating": {
+										"type": "boolean"
+									},
+									"ceilingFan": {
+										"type": "boolean"
+									},
+									"indoorFireplace": {
+										"type": "boolean"
+									},
+									"heating": {
+										"type": "boolean"
+									},
+									"portableFans": {
+										"type": "boolean"
+									},
+									"airConditioning": {
+										"type": "boolean"
+									}
+								},
+								"type": "object"
+							},
+							"bathroom": {
+								"properties": {
+									"cleaningProducts": {
+										"type": "boolean"
+									},
+									"showerGel": {
+										"type": "boolean"
+									},
+									"hotWater": {
+										"type": "boolean"
+									},
+									"bodySoap": {
+										"type": "boolean"
+									},
+									"conditioner": {
+										"type": "boolean"
+									},
+									"shampoo": {
+										"type": "boolean"
+									},
+									"hairDryer": {
+										"type": "boolean"
+									},
+									"bathtub": {
+										"type": "boolean"
+									}
+								},
+								"type": "object"
+							},
+							"kitchenAndDining": {
+								"properties": {
+									"barbecueUtensils": {
+										"type": "boolean"
+									},
+									"oven": {
+										"type": "boolean"
+									},
+									"cookingBasics": {
+										"type": "boolean"
+									},
+									"diningTable": {
+										"type": "boolean"
+									},
+									"trashCompactor": {
+										"type": "boolean"
+									},
+									"toaster": {
+										"type": "boolean"
+									},
+									"wineGlasses": {
+										"type": "boolean"
+									},
+									"coffeeMaker": {
+										"type": "boolean"
+									},
+									"hotWaterKettle": {
+										"type": "boolean"
+									},
+									"stove": {
+										"type": "boolean"
+									},
+									"dishwasher": {
+										"type": "boolean"
+									},
+									"freezer": {
+										"type": "boolean"
+									},
+									"dishesAndSilverware": {
+										"type": "boolean"
+									},
+									"microwave": {
+										"type": "boolean"
+									},
+									"refrigerator": {
+										"type": "boolean"
+									},
+									"kitchen": {
+										"type": "boolean"
+									}
+								},
+								"type": "object"
+							}
+						},
+						"type": "object"
+					}
+				},
+				"required": [
+					"name",
+					"floor"
+				],
+				"type": "object",
+				"additionalProperties": false
+			}
+		},
+		"securitySchemes": {
+			"jwt": {
+				"type": "http",
+				"scheme": "bearer",
+				"description": "JWT Authorization header using the Bearer scheme.\n\nEnter your token in the text input below.\n\n Example: \"12345abcdef\"\n\n Name: Authorization\n\nIn: header"
+			}
+		}
+	},
+	"info": {
+		"title": "booking-room-app",
+		"version": "1.0.0",
+		"license": {
+			"name": "ISC"
+		},
+		"contact": {}
+	},
+	"openapi": "3.0.0",
+	"paths": {
+		"/room/add": {
+			"post": {
+				"operationId": "AddNewRoom",
+				"responses": {
+					"201": {
+						"description": "Created",
+						"content": {
+							"application/json": {
+								"schema": {}
+							}
+						}
+					},
+					"422": {
+						"description": "Validation Failed",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/ValidationErrorResponse"
+								},
+								"examples": {
+									"Example 1": {
+										"value": {
+											"name": "Validation Error.",
+											"message": "Some fields are not valid.",
+											"status": false,
+											"errors": [
+												{
+													"message": "name is not allowed to be empty",
+													"field": {
+														"label": "name",
+														"value": "",
+														"key": "name"
+													}
+												}
+											]
+										}
+									}
+								}
+							}
+						}
+					}
+				},
+				"tags": [
+					"Rooms"
+				],
+				"security": [],
+				"parameters": [],
+				"requestBody": {
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/IRoomInputDTO"
+							}
+						}
+					}
+				}
+			}
+		}
+	},
+	"servers": [
+		{
+			"url": "/api/v1"
+		}
+	]
+}

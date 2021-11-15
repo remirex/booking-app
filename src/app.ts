@@ -1,12 +1,61 @@
+import 'reflect-metadata'; // We need this in order to use @Decorators
+
 import express from 'express';
 
+import config from './config';
+
 const app = express();
-const port = 6000;
+/**
+ * A little hack here
+ * Import/Export can only be used in 'top-level code'
+ * Well, at least in node 10 without babel and at the time of writing
+ * So we are using good old require.
+ **/
+require('./loaders').default({ expressApp: app });
 
-app.get('/', (req, res) => {
-  res.send('Hello World!');
+const server = app
+  .listen(config.port, function () {
+    //Logger.info(`Webserver is ready and listening on port ${config.port}`);
+    console.log('Webserver is ready and listening on port: ', config.port);
+  })
+  .on('error', err => {
+    //Logger.error(err);
+    console.log(err);
+    process.exit(1);
+  });
+
+// quit on ctrl-c when running docker in terminal
+process.on('SIGINT', function onSigint() {
+  //Logger.info('Got SIGINT (aka ctrl-c in docker). Graceful shutdown ', new Date().toISOString());
+  console.log('Got SIGINT (aka ctrl-c in docker). Graceful shutdown ', new Date().toISOString());
+  shutdown();
 });
 
-app.listen(port, () => {
-  console.log(`Example app listening at http://localhost:${port}`);
+// quit properly on docker stop
+process.on('SIGTERM', function onSigterm() {
+  //Logger.info('Got SIGTERM (docker container stop). Graceful shutdown ', new Date().toISOString());
+  console.log('Got SIGTERM (docker container stop). Graceful shutdown ', new Date().toISOString());
+  shutdown();
 });
+
+// shut down server
+function shutdown() {
+  server.close(function onServerClosed(err) {
+    if (err) {
+      //Logger.error(err);
+      console.log(err);
+      process.exitCode = 1;
+    }
+    process.exit();
+  });
+}
+// const app = express();
+// const port = 6000;
+//
+// app.get('/', (req, res) => {
+//   res.send('Hello World!');
+// });
+//
+// app.listen(port, () => {
+//   console.log(`Example app listening at http://localhost:${port}`);
+// });
