@@ -4,21 +4,6 @@ export interface IRoom {
   capacity: number;
 }
 
-/**
- * @example {
- *   "name": "New room",
- *   "floor": 4,
- *   "capacity": 4,
- *   "assets": {
- *     "kitchenAndDining": {
- *       "kitchen": true,
- *       "microwave": true,
- *       "dishwasher": true,
- *       "coffeeMaker": true
- *     }
- *   }
- * }
- */
 export interface IRoomInputDTO {
   name: string;
   floor: number;
@@ -51,6 +36,44 @@ export interface IRoomInputDTO {
       hotWater?: boolean;
       showerGel?: boolean;
       cleaningProducts?: boolean;
+    };
+    heatingAndCooling?: {
+      airConditioning?: boolean;
+      portableFans?: boolean;
+      heating?: boolean;
+      indoorFireplace?: boolean;
+      ceilingFan?: boolean;
+      radiantHeating?: boolean;
+    };
+    bedroomAndLaundry?: {
+      washer?: boolean;
+      dryer?: boolean;
+      essentials?: boolean;
+      hangers?: boolean;
+      bedLinens?: boolean;
+      extraPillowsAndBlankets?: boolean;
+      roomDarkeningShades?: boolean;
+      iron?: boolean;
+      clothingStorage?: boolean;
+    };
+    internetAndOffice?: {
+      wiFi?: boolean;
+      dedicatedWorkspace?: boolean;
+    };
+    entertainment?: {
+      tv?: boolean;
+      gameConsole?: boolean;
+      booksAndReadingMaterial?: boolean;
+      bluetoothSoundSystem?: boolean;
+      exerciseEquipment?: boolean;
+    };
+    parkingAndFacilities?: {
+      elevator?: boolean;
+      gym?: boolean;
+      privateGym?: boolean;
+      evCharger?: boolean;
+      paidParkingGarageOnPremises?: boolean;
+      paidParkingGarageOffPremises?: boolean;
     };
   };
 }
