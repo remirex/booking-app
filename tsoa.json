@@ -2,7 +2,8 @@
   "entryFile": "src/app.ts",
   "noImplicitAdditionalProperties": "throw-on-extras",
   "controllerPathGlobs": [
-    "src/services/room.ts"
+    "src/services/room.ts",
+    "src/services/user.ts"
   ],
   "spec": {
     "outputDirectory": "public",

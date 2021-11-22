@@ -10,7 +10,7 @@ export default class Item extends Generic {
   }
 
   public async createItem(createData: IItemInputDTO) {
-    return this.create(createData, false, true, 'slug', createData.name);
+    return this.create(createData, false, true, ['slug'], [createData.name]);
   }
 
   public async getItem(itemId: string) {
