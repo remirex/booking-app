@@ -1,10 +1,10 @@
 import mongoose from 'mongoose';
 import slugify from 'slugify';
 
-import AlreadyExistException from '../api/exceptions/AlreadyExistException';
-import CannotCreateRecordException from '../api/exceptions/CannotCreateRecordException';
-import WrongObjectIdException from '../api/exceptions/WrongObjectIdException';
-import NotFoundException from '../api/exceptions/NotFoundException';
+import AlreadyExistException from '../api/exceptions/alreadyExistException';
+import CannotCreateRecordException from '../api/exceptions/cannotCreateRecordException';
+import WrongObjectIdException from '../api/exceptions/wrongObjectIdException';
+import NotFoundException from '../api/exceptions/notFoundException';
 
 export default class Generic {
   private readonly model;
@@ -13,10 +13,19 @@ export default class Generic {
     this.model = model;
   }
 
-  public async create(data: any, isUpdate: boolean, isUnique: boolean, search_field?: string, search_value?: any) {
-    if (isUnique) {
-      const exist = await isExist(this.model, isUpdate, isUnique, search_field!, search_value);
-      if (exist) throw new AlreadyExistException(search_value);
+  public async create(
+    data: any,
+    isUpdate: boolean,
+    isUnique: boolean,
+    searchUniqueFields?: string[],
+    searchUniqueValues?: string[],
+  ) {
+    if (isUnique && searchUniqueFields && searchUniqueValues) {
+      for (const [i, sf] of searchUniqueFields.entries()) {
+        const sv = searchUniqueValues[i];
+        const exist = await isExist(this.model, isUpdate, isUnique, sf, sv);
+        if (exist) throw new AlreadyExistException(sv);
+      }
     }
 
     const record = await this.model.create({ ...data });
@@ -35,21 +44,37 @@ export default class Generic {
     return item;
   }
 
+  public async findBy(search_field: string, search_value: any) {
+    const queryObj: any = {};
+    queryObj[search_field] = search_value;
+    return this.model.findOne(queryObj);
+  }
+
+  public async findByQueryObject(queryObj) {
+    const item = await this.model.findOne(queryObj);
+    if (!item) throw new NotFoundException();
+    return item;
+  }
+
   public async update(
     id: string,
     data: any,
     isUpdate: boolean,
     isUnique: boolean,
-    search_field: string,
-    search_value: any,
+    searchUniqueFields?: string[],
+    searchUniqueValues?: string[],
   ) {
     const valid = await isValid(id);
     if (!valid) throw new WrongObjectIdException();
 
-    const exist = await isExist(this.model, isUpdate, isUnique, search_field, search_value);
-    if (exist) throw new AlreadyExistException(search_value);
-
-    if (isUnique) data[search_field] = slugify(search_value, { lower: true });
+    if (isUnique && searchUniqueFields && searchUniqueValues) {
+      for (const [i, sf] of searchUniqueFields.entries()) {
+        const sv = searchUniqueValues[i];
+        const exist = await isExist(this.model, isUpdate, isUnique, sf, sv);
+        if (exist) throw new AlreadyExistException(sv);
+        data[sf] = slugify(sv, { lower: true });
+      }
+    }
 
     const item = await this.model.findByIdAndUpdate(id, { ...data }, { new: true });
     if (!item) throw new NotFoundException();
@@ -65,6 +90,10 @@ export default class Generic {
     if (!item) throw new NotFoundException();
 
     return true;
+  }
+
+  public async countDocuments() {
+    return await this.model.countDocuments();
   }
 }
 

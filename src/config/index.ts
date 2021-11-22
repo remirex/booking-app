@@ -28,4 +28,16 @@ export default {
   api: {
     prefix: '/api/v1',
   },
+
+  jwtSecret: String(process.env.JWT_SECRET),
+
+  emails: {
+    user: String(process.env.EMAIL_USER),
+    pass: String(process.env.EMAIL_PASS),
+    from: String(process.env.EMAIL_FROM),
+    host: String(process.env.EMAIL_HOST),
+    port: Number(process.env.EMAIL_PORT),
+  },
+
+  clientUrl: process.env.CLIENT_URI,
 };
