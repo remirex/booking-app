@@ -329,6 +329,22 @@
 				],
 				"type": "object",
 				"additionalProperties": false
+			},
+			"IUserLoginDTO": {
+				"properties": {
+					"email": {
+						"type": "string"
+					},
+					"password": {
+						"type": "string"
+					}
+				},
+				"required": [
+					"email",
+					"password"
+				],
+				"type": "object",
+				"additionalProperties": false
 			}
 		},
 		"securitySchemes": {
@@ -540,6 +556,77 @@
 						"application/json": {
 							"schema": {
 								"$ref": "#/components/schemas/ITokenInputDTO"
+							}
+						}
+					}
+				}
+			}
+		},
+		"/auth/login": {
+			"post": {
+				"operationId": "Login",
+				"responses": {
+					"200": {
+						"description": "LoggedIn",
+						"content": {
+							"application/json": {
+								"schema": {
+									"properties": {
+										"jwtToken": {},
+										"auth": {
+											"type": "boolean"
+										}
+									},
+									"required": [
+										"jwtToken",
+										"auth"
+									],
+									"type": "object"
+								}
+							}
+						}
+					},
+					"422": {
+						"description": "Validation Failed",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/ValidationErrorResponse"
+								},
+								"examples": {
+									"Example 1": {
+										"value": {
+											"name": "Validation Error.",
+											"message": "Some fields are not valid.",
+											"status": false,
+											"errors": [
+												{
+													"message": "email is not allowed to be empty",
+													"field": {
+														"label": "email",
+														"value": "",
+														"key": "email"
+													}
+												}
+											]
+										}
+									}
+								}
+							}
+						}
+					}
+				},
+				"tags": [
+					"Authorization"
+				],
+				"security": [],
+				"parameters": [],
+				"requestBody": {
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/IUserLoginDTO"
 							}
 						}
 					}

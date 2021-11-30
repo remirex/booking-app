@@ -72,7 +72,7 @@ Available on&nbsp;GitHub. Highly compatible. Designer friendly. More than 50%&nb
 <!-- Image text color should be opposite to background color. Set your url, image src, alt and title. Alt text should fit the image size. Real image size should be x2. URL format: http://domain.com/?utm_source={{Campaign-Source}}&utm_medium=email&utm_content=logo&utm_campaign={{Campaign-Name}} -->
 <a target="_blank" style="text-decoration: none;"
 href=""><img border="0" vspace="0" hspace="0"
-src="public/images/logo-black.png"
+src="https://raw.githubusercontent.com/remirex/booking-app/development/public/images/logo-black.png"
 width="100" height="30"
 alt="Logo" title="Logo" style="
 color: #000000;
@@ -119,7 +119,7 @@ Register Verification API - Verify Email
 <td align="center" valign="top" style="border-collapse: collapse; border-spacing: 0; margin: 0; padding: 0;
 padding-top: 20px;" class="hero"><a target="_blank" style="text-decoration: none;"
 href=""><img border="0" vspace="0" hspace="0"
-src="public/images/booking.png"
+src="https://raw.githubusercontent.com/remirex/booking-app/development/public/images/booking.png"
 alt="Please enable images to view this content" title="Hero Image"
 width="560" style="
 width: 100%;
@@ -197,7 +197,7 @@ style="text-decoration: none;"><img border="0" vspace="0" hspace="0" style="padd
 color: #000000;"
 alt="F" title="Facebook"
 width="44" height="44"
-src="public/images/social-icons/facebook.png"></a></td>
+src="https://raw.githubusercontent.com/remirex/booking-app/development/public/images/social-icons/facebook.png"></a></td>
 
 <!-- ICON 2-->
 <td align="center" valign="middle" style="margin: 0; padding: 0; padding-left: 10px; padding-right: 10px; border-collapse: collapse; border-spacing: 0;"><a target="_blank"
@@ -206,7 +206,7 @@ style="text-decoration: none;"><img border="0" vspace="0" hspace="0" style="padd
 color: #000000;"
 alt="G" title="Google Plus"
 width="44" height="44"
-src="public/images/social-icons/googleplus.png"></a></td>
+src="https://raw.githubusercontent.com/remirex/booking-app/development/public/images/social-icons/googleplus.png"></a></td>
 
 <!-- ICON 3-->
 <td align="center" valign="middle" style="margin: 0; padding: 0; padding-left: 10px; padding-right: 10px; border-collapse: collapse; border-spacing: 0;"><a target="_blank"
@@ -215,7 +215,7 @@ style="text-decoration: none;"><img border="0" vspace="0" hspace="0" style="padd
 color: #000000;"
 alt="I" title="Instagram"
 width="44" height="44"
-src="public/images/social-icons/instagram.png"></a></td>
+src="https://raw.githubusercontent.com/remirex/booking-app/development/public/images/social-icons/instagram.png"></a></td>
 
 </tr>
 </table>
@@ -236,7 +236,7 @@ Powered by FTeam. © 2021 mirkojosimovic1987@gmail.com
 <!-- ANALYTICS -->
 <!-- http://www.google-analytics.com/collect?v=1&tid={{UA-Tracking-ID}}&cid={{Client-ID}}&t=event&ec=email&ea=open&cs={{Campaign-Source}}&cm=email&cn={{Campaign-Name}} -->
 <img width="1" height="1" border="0" vspace="0" hspace="0" style="margin: 0; padding: 0; outline: none; text-decoration: none; -ms-interpolation-mode: bicubic; border: none; display: block;"
-src="public/images/tracker.png" />
+src="https://raw.githubusercontent.com/remirex/booking-app/development/public/images/tracker.png" />
 
 </td>
 </tr>

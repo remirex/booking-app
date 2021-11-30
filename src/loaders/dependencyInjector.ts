@@ -3,6 +3,7 @@ import nodemailer from 'nodemailer';
 
 import config from '../config';
 import LoggerInstance from './logger';
+import Password from '../services/password';
 
 export default ({ mongoConnection, models }: { mongoConnection; models: { name: string; model: any }[] }) => {
   try {
@@ -11,6 +12,8 @@ export default ({ mongoConnection, models }: { mongoConnection; models: { name: 
     });
 
     Container.set('logger', LoggerInstance);
+
+    Container.set('password', Password);
 
     Container.set(
       'emailClient',

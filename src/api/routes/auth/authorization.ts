@@ -3,7 +3,7 @@ import { Container } from 'typedi';
 import { Logger } from 'winston';
 
 import User from '../../../services/user';
-import { IUserInputDTO, ITokenInputDTO } from '../../../interfaces/IUser';
+import { IUserInputDTO, ITokenInputDTO, IUserLoginDTO } from '../../../interfaces/IUser';
 import bodyRequest from '../../requests';
 
 const route = Router();
@@ -29,6 +29,17 @@ export default (app: Router) => {
     logger.debug('Calling Verify Email endpoint with body: %o', req.body);
     try {
       const response = await authServiceInstance.verifyAccount(req.body as ITokenInputDTO);
+      return res.status(200).json(response);
+    } catch (err) {
+      logger.error('🔥 error: %o', err);
+      return next(err);
+    }
+  });
+
+  route.post('/login', async (req: Request, res: Response, next: NextFunction) => {
+    logger.debug('Calling User Login endpoint with body: %o', req.body);
+    try {
+      const response = await authServiceInstance.login(req.body as IUserLoginDTO, req.ip);
       return res.status(200).json(response);
     } catch (err) {
       logger.error('🔥 error: %o', err);
