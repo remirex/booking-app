@@ -14,6 +14,7 @@ import WrongCredentialException from '../api/exceptions/auth/wrongCredentialExce
 import NotVerifiedException from '../api/exceptions/auth/notVerifiedException';
 import { generateJwtToken } from '../helpers/jwt/token';
 import { LoggedUserResponse } from '../types/loggedUserResponse';
+import NotFoundException from '../api/exceptions/notFoundException';
 
 @Route('/auth')
 @Tags('Authorization')
@@ -21,6 +22,7 @@ import { LoggedUserResponse } from '../types/loggedUserResponse';
 export default class User extends Generic {
   constructor(
     @Inject('userModel') private userModel: Models.UserModel,
+    @Inject('refreshTokenModel') private refreshTokenModel: Models.RefreshTokenModel,
     @Inject('password') private password,
     private notification: Notifications,
   ) {
@@ -177,5 +179,28 @@ export default class User extends Generic {
       auth: true,
       jwtToken,
     };
+  }
+
+  @Post('/refresh-token')
+  @SuccessResponse('200', 'Refreshed')
+  @Response<ValidationErrorResponse>(422, 'Validation Failed', {
+    name: 'Validation Error.',
+    message: 'Some fields are not valid.',
+    status: false,
+    errors: [
+      {
+        message: 'token is not allowed to be empty',
+        field: {
+          label: 'token',
+          value: '',
+          key: 'token',
+        },
+      },
+    ],
+  })
+  public async refreshToken(@Body() refreshTokenData: ITokenInputDTO, @Query() @Hidden() isAddress?: string) {
+    const oldRefreshToken = await this.findBy('token', refreshTokenData.token, ['user']);
+    if (!oldRefreshToken || !oldRefreshToken.isActive) throw new NotFoundException();
+    console.log('old refresh token: ', oldRefreshToken);
   }
 }

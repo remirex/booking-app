@@ -23,9 +23,14 @@ export default async ({ expressApp }) => {
     model: require('../models/user').default,
   };
 
+  const refreshTokenModel = {
+    name: 'refreshTokenModel',
+    model: require('../models/refreshToken').default,
+  };
+
   await dependencyInjectorLoader({
     mongoConnection,
-    models: [itemModel, roomModel, userModel],
+    models: [itemModel, roomModel, userModel, refreshTokenModel],
   });
   Logger.info('Dependency Injector loaded');
 

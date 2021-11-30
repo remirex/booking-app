@@ -14,6 +14,17 @@ export interface IUser {
   status: string;
 }
 
+export interface IRefreshToken {
+  id: string;
+  user: object;
+  token: string;
+  createdByIp: string;
+  revokedByIp: string;
+  isActive: boolean;
+  revoked: number;
+  replacedByToken: string;
+}
+
 export interface IUserInputDTO {
   name: string;
   username: string;
