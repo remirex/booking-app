@@ -18,7 +18,7 @@ export default class Item extends Generic {
   }
 
   public async updateItem(itemId: string, updateData: IItemInputDTO) {
-    return this.update(itemId, updateData, true, true, 'slug', updateData.name);
+    return this.update(itemId, updateData, true, true, ['slug'], [updateData.name]);
   }
 
   public async deleteItem(itemId: string) {
