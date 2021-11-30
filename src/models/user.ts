@@ -2,6 +2,7 @@ import mongoose from 'mongoose';
 
 import { UserRole, UserStatus } from '../helpers/enums/enums';
 import { IUser } from '../interfaces/IUser';
+import Password from '../services/password';
 
 const schema = new mongoose.Schema(
   {
@@ -55,5 +56,17 @@ const schema = new mongoose.Schema(
     timestamps: true,
   },
 );
+
+schema.pre('save', async function (done) {
+  if (this.isModified('password')) {
+    const hashed = await Password.toHash(this.get('password'));
+    this.set('password', hashed);
+  }
+  done();
+});
+
+schema.virtual('isVerified').get(function (this: { verified: Date; passwordReset: Date }): boolean {
+  return !!(this.verified || this.passwordReset);
+});
 
 export default mongoose.model<IUser & mongoose.Document>('User', schema);

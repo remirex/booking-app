@@ -26,3 +26,8 @@ export interface IUserInputDTO {
 export interface ITokenInputDTO {
   token: string;
 }
+
+export interface IUserLoginDTO {
+  email: string;
+  password: string;
+}
