@@ -1,9 +1,9 @@
 import { Inject, Service } from 'typedi';
 import { Tags, Route, Post, Body, SuccessResponse, Response } from 'tsoa';
 
-import Generic from './generic';
-import { IRoomInputDTO } from '../interfaces/IRoom';
-import { ValidationErrorResponse } from '../types/validationErrorResponse';
+import Generic from '../../generic';
+import { IRoomInputDTO } from '../../../interfaces/IRoom';
+import { ValidationErrorResponse } from '../../../types/validationErrorResponse';
 
 @Tags('Rooms')
 @Route('/room')

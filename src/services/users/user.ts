@@ -1,20 +1,19 @@
 import { Inject, Service } from 'typedi';
 import { Body, Post, Response, Route, SuccessResponse, Tags, Query, Hidden } from 'tsoa';
 
-import Generic from './generic';
-import { ITokenInputDTO, IUserInputDTO, IUserLoginDTO } from '../interfaces/IUser';
-import { UserRole, UserStatus } from '../helpers/enums/enums';
-import { EmailTemplates } from '../helpers/enums/enums';
-import UserWithThatEmailAlreadyRegisterButNotVerifiedException from '../api/exceptions/auth/userWithThatEmailAlreadyRegisterButNotVerifiedException';
-import { randomTokenString } from '../helpers/auth/auth';
-import { ValidationErrorResponse } from '../types/validationErrorResponse';
-import Notifications from './email/notifications';
-import UserWithThatEmailAlreadyExistsException from '../api/exceptions/auth/userWithThatEmailAlreadyExistsException';
-import WrongCredentialException from '../api/exceptions/auth/wrongCredentialException';
-import NotVerifiedException from '../api/exceptions/auth/notVerifiedException';
-import { generateJwtToken } from '../helpers/jwt/token';
-import { LoggedUserResponse } from '../types/loggedUserResponse';
-import NotFoundException from '../api/exceptions/notFoundException';
+import Generic from '../generic';
+import { ITokenInputDTO, IUserInputDTO, IUserLoginDTO } from '../../interfaces/IUser';
+import { UserRole, UserStatus } from '../../helpers/enums/enums';
+import { EmailTemplates } from '../../helpers/enums/enums';
+import UserWithThatEmailAlreadyRegisterButNotVerifiedException from '../../api/exceptions/auth/userWithThatEmailAlreadyRegisterButNotVerifiedException';
+import { generateRefreshToken, randomTokenString } from '../../helpers/auth/auth';
+import { ValidationErrorResponse } from '../../types/validationErrorResponse';
+import Notifications from '../email/notifications';
+import UserWithThatEmailAlreadyExistsException from '../../api/exceptions/auth/userWithThatEmailAlreadyExistsException';
+import WrongCredentialException from '../../api/exceptions/auth/wrongCredentialException';
+import NotVerifiedException from '../../api/exceptions/auth/notVerifiedException';
+import { generateJwtToken } from '../../helpers/jwt/token';
+import { LoggedUserResponse } from '../../types/loggedUserResponse';
 
 @Route('/auth')
 @Tags('Authorization')
@@ -174,33 +173,12 @@ export default class User extends Generic {
       status: user.status,
     };
     const jwtToken = generateJwtToken(dataStoredInToken);
+    const refreshToken = await generateRefreshToken(user, ipAddress!, this.refreshTokenModel);
 
     return {
       auth: true,
       jwtToken,
+      refreshToken: refreshToken.token,
     };
-  }
-
-  @Post('/refresh-token')
-  @SuccessResponse('200', 'Refreshed')
-  @Response<ValidationErrorResponse>(422, 'Validation Failed', {
-    name: 'Validation Error.',
-    message: 'Some fields are not valid.',
-    status: false,
-    errors: [
-      {
-        message: 'token is not allowed to be empty',
-        field: {
-          label: 'token',
-          value: '',
-          key: 'token',
-        },
-      },
-    ],
-  })
-  public async refreshToken(@Body() refreshTokenData: ITokenInputDTO, @Query() @Hidden() isAddress?: string) {
-    const oldRefreshToken = await this.findBy('token', refreshTokenData.token, ['user']);
-    if (!oldRefreshToken || !oldRefreshToken.isActive) throw new NotFoundException();
-    console.log('old refresh token: ', oldRefreshToken);
   }
 }

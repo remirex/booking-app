@@ -44,11 +44,17 @@ export default class Generic {
     return item;
   }
 
-  public async findBy(search_field: string, search_value: any, populate?: string[]) {
+  public async findBy(search_field: string, search_value: any, refs?: string[]) {
     const queryObj: any = {};
     queryObj[search_field] = search_value;
-    if (populate?.length != 0) return this.model.findOne(queryObj).populate(populate);
-    return this.model.findOne(queryObj);
+    if (refs?.length != 0) {
+      const item = await this.model.findOne(queryObj).populate(refs);
+      if (!item) throw new NotFoundException();
+      return item;
+    }
+    const item = await this.model.findOne(queryObj);
+    if (!item) throw new NotFoundException();
+    return item;
   }
 
   public async findByQueryObject(queryObj) {

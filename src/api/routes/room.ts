@@ -1,7 +1,7 @@
 import { NextFunction, Request, Response, Router } from 'express';
 import { Container } from 'typedi';
 
-import Room from '../../services/room';
+import Room from '../../services/booking/rooms/room';
 import { IRoomInputDTO } from '../../interfaces/IRoom';
 import bodyRequest from '../requests';
 

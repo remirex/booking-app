@@ -30,6 +30,7 @@ export default {
   },
 
   jwtSecret: String(process.env.JWT_SECRET),
+  jwtAlgorithm: String(process.env.JWT_ALGO),
 
   emails: {
     user: String(process.env.EMAIL_USER),

@@ -337,11 +337,15 @@
 					},
 					"jwtToken": {
 						"type": "string"
+					},
+					"refreshToken": {
+						"type": "string"
 					}
 				},
 				"required": [
 					"auth",
-					"jwtToken"
+					"jwtToken",
+					"refreshToken"
 				],
 				"type": "object",
 				"additionalProperties": false
@@ -644,7 +648,76 @@
 				"operationId": "RefreshToken",
 				"responses": {
 					"200": {
-						"description": "Refreshed"
+						"description": "Refreshed",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/LoggedUserResponse"
+								}
+							}
+						}
+					},
+					"422": {
+						"description": "Validation Failed",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/ValidationErrorResponse"
+								},
+								"examples": {
+									"Example 1": {
+										"value": {
+											"name": "Validation Error.",
+											"message": "Some fields are not valid.",
+											"status": false,
+											"errors": [
+												{
+													"message": "token is not allowed to be empty",
+													"field": {
+														"label": "token",
+														"value": "",
+														"key": "token"
+													}
+												}
+											]
+										}
+									}
+								}
+							}
+						}
+					}
+				},
+				"description": "Use a refresh token to generate a new JWT token and a new refresh token",
+				"tags": [
+					"Authorization"
+				],
+				"security": [],
+				"parameters": [],
+				"requestBody": {
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/ITokenInputDTO"
+							}
+						}
+					}
+				}
+			}
+		},
+		"/auth/revoke-token": {
+			"post": {
+				"operationId": "RevokeToken",
+				"responses": {
+					"200": {
+						"description": "Revoked",
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "boolean"
+								}
+							}
+						}
 					},
 					"422": {
 						"description": "Validation Failed",
@@ -679,7 +752,11 @@
 				"tags": [
 					"Authorization"
 				],
-				"security": [],
+				"security": [
+					{
+						"jwt": []
+					}
+				],
 				"parameters": [],
 				"requestBody": {
 					"required": true,

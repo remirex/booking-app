@@ -3,7 +3,7 @@ import joi from 'joi';
 
 import middleware from '../../middleware';
 
-export function verifySchema(req: Request, res: Response, next: NextFunction) {
+export function tokenSchema(req: Request, res: Response, next: NextFunction) {
   const schema = joi
     .object({
       token: joi.string().required(),

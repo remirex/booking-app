@@ -2,7 +2,7 @@ import mongoose from 'mongoose';
 
 import { UserRole, UserStatus } from '../helpers/enums/enums';
 import { IUser } from '../interfaces/IUser';
-import Password from '../services/password';
+import Password from '../services/users/password';
 
 const schema = new mongoose.Schema(
   {
@@ -56,6 +56,12 @@ const schema = new mongoose.Schema(
     timestamps: true,
   },
 );
+
+schema.method('toJSON', function () {
+  const { __v, _id, ...object } = this.toObject();
+  object.id = _id;
+  return object;
+});
 
 schema.pre('save', async function (done) {
   if (this.isModified('password')) {
