@@ -89,6 +89,12 @@ export default class Generic {
     return item;
   }
 
+  public async updateOne(queryObject: any, toUpdate: any) {
+    await this.model.updateOne(queryObject, {
+      $set: toUpdate,
+    });
+  }
+
   public async delete(id: string) {
     const valid = await isValid(id);
     if (!valid) throw new WrongObjectIdException();

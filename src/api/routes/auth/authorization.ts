@@ -4,7 +4,13 @@ import { Logger } from 'winston';
 
 import User from '../../../services/users/user';
 import Token from '../../../services/authToken/token';
-import { IUserInputDTO, ITokenInputDTO, IUserLoginDTO } from '../../../interfaces/IUser';
+import {
+  IUserInputDTO,
+  ITokenInputDTO,
+  IUserLoginDTO,
+  IUserEmailDTO,
+  IUserPasswordResetDTO,
+} from '../../../interfaces/IUser';
 import bodyRequest from '../../requests';
 
 const route = Router();
@@ -57,7 +63,7 @@ export default (app: Router) => {
     }
   });
   route.post('/revoke-token', bodyRequest.tokenSchema, async (req: Request, res: Response, next: NextFunction) => {
-    logger.debug('Calling Refresh Token endpoint with body: %o', req.body);
+    logger.debug('Calling Revoke Token endpoint with body: %o', req.body);
     try {
       let authHeader;
       if (
@@ -67,6 +73,26 @@ export default (app: Router) => {
         authHeader = req.headers.authorization.split(' ')[1];
       }
       const response = await tokenServiceInstance.revokeToken(req.body as ITokenInputDTO, req.ip, authHeader);
+      return res.status(200).json(response);
+    } catch (err) {
+      logger.error('🔥 error: %o', err);
+      return next(err);
+    }
+  });
+  route.post('/forgot-password', bodyRequest.forgotSchema, async (req: Request, res: Response, next: NextFunction) => {
+    logger.debug('Calling Forgot Password endpoint with body: %o', req.body);
+    try {
+      const response = await authServiceInstance.forgotPassword(req.body as IUserEmailDTO);
+      return res.status(200).json(response);
+    } catch (err) {
+      logger.error('🔥 error: %o', err);
+      return next(err);
+    }
+  });
+  route.post('/reset-password', bodyRequest.resetSchema, async (req: Request, res: Response, next: NextFunction) => {
+    logger.debug('Calling Reset Password endpoint with body: %o', req.body);
+    try {
+      const response = await authServiceInstance.resetPassword(req.body as IUserPasswordResetDTO);
       return res.status(200).json(response);
     } catch (err) {
       logger.error('🔥 error: %o', err);

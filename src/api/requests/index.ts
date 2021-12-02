@@ -3,6 +3,8 @@ import { addRoomSchema } from './room/add';
 import { registerSchema } from './auth/register';
 import { tokenSchema } from './auth/token';
 import { loginSchema } from './auth/login';
+import { forgotSchema } from './auth/password/forgot';
+import { resetSchema } from './auth/password/reset';
 
 export default {
   createItemSchema,
@@ -10,4 +12,6 @@ export default {
   registerSchema,
   tokenSchema,
   loginSchema,
+  forgotSchema,
+  resetSchema,
 };

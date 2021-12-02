@@ -2,8 +2,9 @@ import { Service, Inject } from 'typedi';
 
 import { EmailTemplates } from '../../helpers/enums/enums';
 import config from '../../config';
-import { verifyUser } from './templates/verifyUser';
-import { alreadyRegistered } from './templates/alreadyRegistered';
+import { verifyUser } from './templates/auth/verifyUser';
+import { alreadyRegistered } from './templates/auth/alreadyRegistered';
+import { passwordReset } from './templates/auth/passwordReset';
 
 @Service()
 export default class Notifications {
@@ -33,7 +34,7 @@ export default class Notifications {
         content = alreadyRegistered(data);
         break;
       case EmailTemplates.RESET_PASSWORD:
-        //content = passwordResetEmail(data);
+        content = passwordReset(data);
         break;
       default:
     }
