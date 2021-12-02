@@ -42,3 +42,13 @@ export interface IUserLoginDTO {
   email: string;
   password: string;
 }
+
+export interface IUserEmailDTO {
+  email: string;
+}
+
+export interface IUserPasswordResetDTO {
+  token: string;
+  password: string;
+  repeatPassword: string;
+}

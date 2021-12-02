@@ -1,6 +1,4 @@
-import config from '../../../config';
-
-export const verifyUser = ({ token, name }: { token: string; name: string }): string => `
+export const alreadyRegistered = ({ email, name }: { email: string; name: string }): string => `
   <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <meta http-equiv="content-type" content="text/html; charset=utf-8">
@@ -111,7 +109,7 @@ F Team Booking Apartment App
 padding-top: 5px;
 color: #000000;
 font-family: sans-serif;" class="subheader">
-Register Verification API - Verify Email
+Booking API - Verify Email
 </td>
 </tr>
 
@@ -136,24 +134,7 @@ color: #000000; font-size: 13px; margin: 0; padding: 0; outline: none; text-deco
 padding-top: 25px; 
 color: #000000;
 font-family: sans-serif;" class="paragraph">
-<b>Hi, ${name}</b>. Please click on the following link, or paste this into your browser to complete the process:
-</td>
-</tr>
-
-<!-- BUTTON -->
-<!-- Set button background color at TD, link/text color at A and TD, font family ("sans-serif" or "Georgia, serif") at TD. For verification codes add "letter-spacing: 5px;". Link format: http://domain.com/?utm_source={{Campaign-Source}}&utm_medium=email&utm_content={{Button-Name}}&utm_campaign={{Campaign-Name}} -->
-<tr>
-<td align="center" valign="top" style="border-collapse: collapse; border-spacing: 0; margin: 0; padding: 0; padding-left: 6.25%; padding-right: 6.25%; width: 87.5%;
-padding-top: 25px;
-padding-bottom: 5px;" class="button"><a
-href="${config.clientUrl}/verify?token=${token}" target="_blank" style="text-decoration: underline;">
-<table border="0" cellpadding="0" cellspacing="0" align="center" style="max-width: 240px; min-width: 120px; border-collapse: collapse; border-spacing: 0; padding: 0;"><tr><td align="center" valign="middle" style="padding: 12px 24px; margin: 0; text-decoration: underline; border-collapse: collapse; border-spacing: 0; border-radius: 4px; -webkit-border-radius: 4px; -moz-border-radius: 4px; -khtml-border-radius: 4px;"
-bgcolor="#E9703E"><a target="_blank" style="text-decoration: underline;
-color: #FFFFFF; font-family: sans-serif; font-size: 17px; font-weight: 400; line-height: 120%;"
-href="${config.clientUrl}/verify?token=${token}">
-Verify Account
-</a>
-</td></tr></table></a>
+<b>Hi, ${name}</b>
 </td>
 </tr>
 
@@ -165,8 +146,7 @@ padding-top: 20px;
 padding-bottom: 25px;
 color: #000000;
 font-family: sans-serif;" class="paragraph">
-If you didn't request this link, you can ignore
-this message.
+Your email <strong>${email}</strong> is already registered.
 </td>
 </tr>
 
@@ -256,7 +236,7 @@ Powered by FTeam. © 2021 mirkojosimovic1987@gmail.com
 <!-- ANALYTICS -->
 <!-- http://www.google-analytics.com/collect?v=1&tid={{UA-Tracking-ID}}&cid={{Client-ID}}&t=event&ec=email&ea=open&cs={{Campaign-Source}}&cm=email&cn={{Campaign-Name}} -->
 <img width="1" height="1" border="0" vspace="0" hspace="0" style="margin: 0; padding: 0; outline: none; text-decoration: none; -ms-interpolation-mode: bicubic; border: none; display: block;"
-src="public/images/tracker.png" />
+src="https://raw.githubusercontent.com/remirex/booking-app/development/public/images/tracker.png" />
 
 </td>
 </tr>

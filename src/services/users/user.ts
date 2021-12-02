@@ -2,7 +2,13 @@ import { Inject, Service } from 'typedi';
 import { Body, Post, Response, Route, SuccessResponse, Tags, Query, Hidden } from 'tsoa';
 
 import Generic from '../generic';
-import { ITokenInputDTO, IUserInputDTO, IUserLoginDTO } from '../../interfaces/IUser';
+import {
+  ITokenInputDTO,
+  IUserInputDTO,
+  IUserLoginDTO,
+  IUserEmailDTO,
+  IUserPasswordResetDTO,
+} from '../../interfaces/IUser';
 import { UserRole, UserStatus } from '../../helpers/enums/enums';
 import { EmailTemplates } from '../../helpers/enums/enums';
 import UserWithThatEmailAlreadyRegisterButNotVerifiedException from '../../api/exceptions/auth/userWithThatEmailAlreadyRegisterButNotVerifiedException';
@@ -14,6 +20,7 @@ import WrongCredentialException from '../../api/exceptions/auth/wrongCredentialE
 import NotVerifiedException from '../../api/exceptions/auth/notVerifiedException';
 import { generateJwtToken } from '../../helpers/jwt/token';
 import { LoggedUserResponse } from '../../types/loggedUserResponse';
+import NotFoundException from '../../api/exceptions/notFoundException';
 
 @Route('/auth')
 @Tags('Authorization')
@@ -180,5 +187,61 @@ export default class User extends Generic {
       jwtToken,
       refreshToken: refreshToken.token,
     };
+  }
+
+  @Post('/forgot-password')
+  @SuccessResponse('200', 'Email was sent')
+  @Response<ValidationErrorResponse>(422, 'Validation Failed', {
+    name: 'Validation Error.',
+    message: 'Some fields are not valid.',
+    status: false,
+    errors: [
+      {
+        message: 'email is not allowed to be empty',
+        field: {
+          label: 'email',
+          value: '',
+          key: 'email',
+        },
+      },
+    ],
+  })
+  public async forgotPassword(@Body() data: IUserEmailDTO): Promise<boolean> {
+    const user = await this.findBy('email', data.email);
+    if (!user) throw new NotFoundException();
+
+    user.resetToken = {
+      token: randomTokenString(),
+      expires: new Date(Date.now() + 24 * 60 * 60 * 1000),
+    };
+    user.save();
+
+    await this.notification.sendTemplateEmail(
+      data.email,
+      'Booking API - Reset Password',
+      EmailTemplates.RESET_PASSWORD,
+      {
+        username: user.username,
+        token: user.resetToken.token,
+      },
+    );
+    return true;
+  }
+  @Post('/reset-password')
+  @SuccessResponse('200', 'Password was successfully reset')
+  public async resetPassword(@Body() resetData: IUserPasswordResetDTO): Promise<boolean> {
+    const queryObject = {
+      'resetToken.token': resetData.token,
+      'resetToken.expires': { $gt: Date.now() },
+    };
+    await this.findByQueryObject(queryObject);
+
+    const hash = await this.password.toHash(resetData.password);
+
+    await this.updateOne(
+      { 'resetToken.token': resetData.token },
+      { password: hash, passwordReset: Date.now(), resetToken: {} },
+    );
+    return true;
   }
 }
