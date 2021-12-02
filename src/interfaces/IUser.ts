@@ -52,3 +52,10 @@ export interface IUserPasswordResetDTO {
   password: string;
   repeatPassword: string;
 }
+
+export interface IUserDataStoredInTokenDTO {
+  id: string;
+  role: string;
+  status: string;
+  isTwoFactorAuthenticated: boolean;
+}

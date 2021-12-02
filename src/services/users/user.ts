@@ -8,6 +8,7 @@ import {
   IUserLoginDTO,
   IUserEmailDTO,
   IUserPasswordResetDTO,
+  IUserDataStoredInTokenDTO,
 } from '../../interfaces/IUser';
 import { UserRole, UserStatus } from '../../helpers/enums/enums';
 import { EmailTemplates } from '../../helpers/enums/enums';
@@ -52,15 +53,15 @@ export default class User extends Generic {
       },
     ],
   })
-  public async register(@Body() registerData: IUserInputDTO): Promise<{ message: string }> {
-    const user = await this.findBy('email', registerData.email);
+  public async register(@Body() registerData: IUserInputDTO): Promise<boolean> {
+    const user = await this.findBy('email', registerData.email, []);
     if (user && user.status === UserStatus.INACTIVE) {
       const data = { 'verificationToken.expires': new Date(Date.now() + 24 * 60 * 60 * 1000) };
       await this.update(user.id, data, true, false, [], []);
 
       await this.notification.sendTemplateEmail(
         registerData.email,
-        'Register Verification API - Verify Email',
+        'Booking API - Verify Email',
         EmailTemplates.VERIFY_EMAIL,
         {
           name: user.name,
@@ -74,7 +75,7 @@ export default class User extends Generic {
     if (user && user.status === UserStatus.ACTIVE) {
       await this.notification.sendTemplateEmail(
         registerData.email,
-        'Register Verification API - Email Already Registered',
+        'Booking API - Email Already Registered',
         EmailTemplates.ALREADY_REGISTERED,
         user,
       );
@@ -99,7 +100,7 @@ export default class User extends Generic {
 
     await this.notification.sendTemplateEmail(
       registerData.email,
-      'Register Verification API - Verify Email',
+      'Booking API - Verify Email',
       EmailTemplates.VERIFY_EMAIL,
       {
         name: registerData.name,
@@ -107,7 +108,7 @@ export default class User extends Generic {
       },
     );
 
-    return { message: 'Registration successful, please check your email for verification instructions' };
+    return true;
   }
 
   @Post('/verify-email')
@@ -127,7 +128,7 @@ export default class User extends Generic {
       },
     ],
   })
-  public async verifyAccount(@Body() tokenData: ITokenInputDTO): Promise<{ message: string }> {
+  public async verifyAccount(@Body() tokenData: ITokenInputDTO): Promise<boolean> {
     const queryObject = {
       'verificationToken.token': tokenData.token,
       'verificationToken.expires': { $gt: Date.now() },
@@ -142,7 +143,7 @@ export default class User extends Generic {
 
     await this.update(user.id, updateData, false, false);
 
-    return { message: 'Verification successful, you can now login' };
+    return true;
   }
 
   @Post('/login')
@@ -166,7 +167,7 @@ export default class User extends Generic {
     @Body() loginData: IUserLoginDTO,
     @Query() @Hidden() ipAddress?: string,
   ): Promise<LoggedUserResponse> {
-    const user = await this.findBy('email', loginData.email);
+    const user = await this.findBy('email', loginData.email, []);
 
     if (!user) throw new WrongCredentialException();
     if (user && user.status != UserStatus.ACTIVE) throw new NotVerifiedException();
@@ -174,10 +175,11 @@ export default class User extends Generic {
     const validPassword = await this.password.compare(user.password, loginData.password);
     if (!validPassword) throw new WrongCredentialException();
 
-    const dataStoredInToken = {
+    const dataStoredInToken: IUserDataStoredInTokenDTO = {
       id: user.id,
       role: user.role,
       status: user.status,
+      isTwoFactorAuthenticated: false,
     };
     const jwtToken = generateJwtToken(dataStoredInToken);
     const refreshToken = await generateRefreshToken(user, ipAddress!, this.refreshTokenModel);
@@ -186,6 +188,7 @@ export default class User extends Generic {
       auth: true,
       jwtToken,
       refreshToken: refreshToken.token,
+      isTwoFactorAuthenticationEnabled: !!user.isTwoFactorAuthenticationEnabled,
     };
   }
 
@@ -207,7 +210,7 @@ export default class User extends Generic {
     ],
   })
   public async forgotPassword(@Body() data: IUserEmailDTO): Promise<boolean> {
-    const user = await this.findBy('email', data.email);
+    const user = await this.findBy('email', data.email, []);
     if (!user) throw new NotFoundException();
 
     user.resetToken = {
@@ -229,6 +232,21 @@ export default class User extends Generic {
   }
   @Post('/reset-password')
   @SuccessResponse('200', 'Password was successfully reset')
+  @Response<ValidationErrorResponse>(422, 'Validation Failed', {
+    name: 'Validation Error.',
+    message: 'Some fields are not valid.',
+    status: false,
+    errors: [
+      {
+        message: 'password is not allowed to be empty',
+        field: {
+          label: 'password',
+          value: '',
+          key: 'password',
+        },
+      },
+    ],
+  })
   public async resetPassword(@Body() resetData: IUserPasswordResetDTO): Promise<boolean> {
     const queryObject = {
       'resetToken.token': resetData.token,

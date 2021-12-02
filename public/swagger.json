@@ -340,12 +340,16 @@
 					},
 					"refreshToken": {
 						"type": "string"
+					},
+					"isTwoFactorAuthenticationEnabled": {
+						"type": "boolean"
 					}
 				},
 				"required": [
 					"auth",
 					"jwtToken",
-					"refreshToken"
+					"refreshToken",
+					"isTwoFactorAuthenticationEnabled"
 				],
 				"type": "object",
 				"additionalProperties": false

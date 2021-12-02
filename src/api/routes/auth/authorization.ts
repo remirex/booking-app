@@ -3,6 +3,7 @@ import { Container } from 'typedi';
 import { Logger } from 'winston';
 
 import User from '../../../services/users/user';
+import Auth from '../../middleware/auth';
 import Token from '../../../services/authToken/token';
 import {
   IUserInputDTO,
@@ -20,6 +21,7 @@ export default (app: Router) => {
 
   const authServiceInstance = Container.get(User);
   const tokenServiceInstance = Container.get(Token);
+  const authMiddlewareInstance = Container.get(Auth);
   const logger: Logger = Container.get('logger');
 
   route.post('/register', bodyRequest.registerSchema, async (req: Request, res: Response, next: NextFunction) => {
@@ -62,23 +64,28 @@ export default (app: Router) => {
       return next(err);
     }
   });
-  route.post('/revoke-token', bodyRequest.tokenSchema, async (req: Request, res: Response, next: NextFunction) => {
-    logger.debug('Calling Revoke Token endpoint with body: %o', req.body);
-    try {
-      let authHeader;
-      if (
-        (req.headers.authorization && req.headers.authorization.split(' ')[0] === 'Token') ||
-        (req.headers.authorization && req.headers.authorization.split(' ')[0] === 'Bearer')
-      ) {
-        authHeader = req.headers.authorization.split(' ')[1];
+  route.post(
+    '/revoke-token',
+    authMiddlewareInstance.authMiddleware(),
+    bodyRequest.tokenSchema,
+    async (req: Request, res: Response, next: NextFunction) => {
+      logger.debug('Calling Revoke Token endpoint with body: %o', req.body);
+      try {
+        let authHeader;
+        if (
+          (req.headers.authorization && req.headers.authorization.split(' ')[0] === 'Token') ||
+          (req.headers.authorization && req.headers.authorization.split(' ')[0] === 'Bearer')
+        ) {
+          authHeader = req.headers.authorization.split(' ')[1];
+        }
+        const response = await tokenServiceInstance.revokeToken(req.body as ITokenInputDTO, req.ip, authHeader);
+        return res.status(200).json(response);
+      } catch (err) {
+        logger.error('🔥 error: %o', err);
+        return next(err);
       }
-      const response = await tokenServiceInstance.revokeToken(req.body as ITokenInputDTO, req.ip, authHeader);
-      return res.status(200).json(response);
-    } catch (err) {
-      logger.error('🔥 error: %o', err);
-      return next(err);
-    }
-  });
+    },
+  );
   route.post('/forgot-password', bodyRequest.forgotSchema, async (req: Request, res: Response, next: NextFunction) => {
     logger.debug('Calling Forgot Password endpoint with body: %o', req.body);
     try {

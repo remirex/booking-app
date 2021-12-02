@@ -3,7 +3,7 @@ import { Body, Post, Response, Route, SuccessResponse, Tags, Query, Hidden, Secu
 
 import Generic from '../generic';
 import { ValidationErrorResponse } from '../../types/validationErrorResponse';
-import { ITokenInputDTO } from '../../interfaces/IUser';
+import { ITokenInputDTO, IUserDataStoredInTokenDTO } from '../../interfaces/IUser';
 import NotFoundException from '../../api/exceptions/notFoundException';
 import { generateRefreshToken, tokenOwner } from '../../helpers/auth/auth';
 import { generateJwtToken } from '../../helpers/jwt/token';
@@ -48,6 +48,7 @@ export default class Token extends Generic {
     @Query() @Hidden() ipAddress?: string,
   ): Promise<LoggedUserResponse> {
     const oldRefreshToken = await this.findBy('token', refreshTokenData.token, ['user']);
+    console.log('isTwoFactorAuthenticated: ', oldRefreshToken.user.isTwoFactorAuthenticationEnabled);
     if (!oldRefreshToken || !oldRefreshToken.isActive) throw new NotFoundException();
 
     const newRefreshToken = await generateRefreshToken(oldRefreshToken.user, ipAddress!, this.refreshTokenModel);
@@ -57,10 +58,11 @@ export default class Token extends Generic {
 
     await oldRefreshToken.save();
 
-    const dataStoredInToken = {
+    const dataStoredInToken: IUserDataStoredInTokenDTO = {
       id: oldRefreshToken.user._id,
       role: oldRefreshToken.user.role,
       status: oldRefreshToken.user.status,
+      isTwoFactorAuthenticated: oldRefreshToken.user.isTwoFactorAuthenticationEnabled,
     };
 
     const jwtToken = generateJwtToken(dataStoredInToken);
@@ -69,6 +71,7 @@ export default class Token extends Generic {
       auth: true,
       jwtToken,
       refreshToken: newRefreshToken.token,
+      isTwoFactorAuthenticationEnabled: !!oldRefreshToken.user.isTwoFactorAuthenticationEnabled,
     };
   }
 

@@ -46,6 +46,14 @@ const schema = new mongoose.Schema(
       expires: Date,
     },
     verified: Date,
+    twoFactorAuthenticationCode: {
+      type: String,
+      default: null,
+    },
+    isTwoFactorAuthenticationEnabled: {
+      type: Boolean,
+      default: false,
+    },
     resetToken: {
       token: String,
       expires: Date,
