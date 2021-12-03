@@ -2,14 +2,13 @@ import { Router } from 'express';
 
 import items from './routes/example/item';
 import rooms from './routes/room';
-import authorization from './routes/auth/authorization';
+import auth from './routes/auth/auth';
 
 export default () => {
   const app = Router();
 
   items(app);
   rooms(app);
-  authorization(app);
-
+  auth(app);
   return app;
 };

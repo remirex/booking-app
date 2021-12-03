@@ -2,15 +2,17 @@ import { NextFunction, Request, Response, Router } from 'express';
 import { Container } from 'typedi';
 import { Logger } from 'winston';
 
-import User from '../../../services/users/user';
+import Authentication from '../../../services/users/auth/authentication';
 import Auth from '../../middleware/auth';
 import Token from '../../../services/authToken/token';
+import TwoFactorAuth from '../../../services/2FA/twoFactorAuth';
 import {
   IUserInputDTO,
   ITokenInputDTO,
   IUserLoginDTO,
   IUserEmailDTO,
   IUserPasswordResetDTO,
+  IUser2FACodeDTO,
 } from '../../../interfaces/IUser';
 import bodyRequest from '../../requests';
 
@@ -19,9 +21,10 @@ const route = Router();
 export default (app: Router) => {
   app.use('/auth', route);
 
-  const authServiceInstance = Container.get(User);
+  const authServiceInstance = Container.get(Authentication);
   const tokenServiceInstance = Container.get(Token);
   const authMiddlewareInstance = Container.get(Auth);
+  const twoFactorAuthInstance = Container.get(TwoFactorAuth);
   const logger: Logger = Container.get('logger');
 
   route.post('/register', bodyRequest.registerSchema, async (req: Request, res: Response, next: NextFunction) => {
@@ -106,4 +109,54 @@ export default (app: Router) => {
       return next(err);
     }
   });
+  route.post(
+    '/2fa/generate',
+    authMiddlewareInstance.authMiddleware(),
+    async (req: Request, res: Response, next: NextFunction) => {
+      logger.debug('Calling Generate Code For 2FA');
+      try {
+        return await twoFactorAuthInstance.generateTwoFactorAuthenticationCode(req.currentUser.id, res);
+      } catch (err) {
+        logger.error('🔥 error: %o', err);
+        return next(err);
+      }
+    },
+  );
+  route.post(
+    '/2fa/turn-on',
+    authMiddlewareInstance.authMiddleware(),
+    bodyRequest.twoFACodeSchema,
+    async (req: Request, res: Response, next: NextFunction) => {
+      logger.debug('Calling Turn On 2FA');
+      try {
+        const response = await twoFactorAuthInstance.turnOnTwoFactorAuthentication(
+          req.body as IUser2FACodeDTO,
+          req.currentUser,
+        );
+        return res.status(200).json(response);
+      } catch (err) {
+        logger.error('🔥 error: %o', err);
+        return next(err);
+      }
+    },
+  );
+  route.post(
+    '/2fa/authenticate',
+    authMiddlewareInstance.authMiddleware(true),
+    bodyRequest.twoFACodeSchema,
+    async (req: Request, res: Response, next: NextFunction) => {
+      logger.debug('Calling 2FA');
+      try {
+        const response = await twoFactorAuthInstance.secondFactorAuthentication(
+          req.body as IUser2FACodeDTO,
+          req.currentUser,
+          req.ip,
+        );
+        return res.status(200).json(response);
+      } catch (err) {
+        logger.error('🔥 error: %o', err);
+        return next(err);
+      }
+    },
+  );
 };

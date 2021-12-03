@@ -3,7 +3,6 @@ import { NextFunction, RequestHandler, Response, Request } from 'express';
 import jwt from 'jsonwebtoken';
 
 import config from '../../config';
-import { IUserDataStoredInTokenDTO } from '../../interfaces/IUser';
 import Generic from '../../services/generic';
 import AuthenticationTokenMissingException from '../exceptions/auth/authenticationTokenMissingException';
 import WrongAuthenticationTokenException from '../exceptions/auth/wrongAuthenticationTokenException';
@@ -22,8 +21,15 @@ export default class Auth extends Generic {
       ) {
         const token = request.headers.authorization.split(' ')[1];
         const secret = config.jwtSecret;
-        const verificationResponse = jwt.verify(token, secret) as IUserDataStoredInTokenDTO;
-        const { id, isTwoFactorAuthenticated } = verificationResponse;
+        let id;
+        let isTwoFactorAuthenticated;
+        jwt.verify(token, secret, function (err, decoded) {
+          if (err) {
+            next(new WrongAuthenticationTokenException(err.message));
+          }
+          id = decoded!['id'];
+          isTwoFactorAuthenticated = decoded!['isTwoFactorAuthenticated'];
+        });
         const user = await this.getById(id);
         if (user) {
           if (!omitSecondFactor && user.isTwoFactorAuthenticationEnabled && !isTwoFactorAuthenticated) {

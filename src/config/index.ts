@@ -41,4 +41,6 @@ export default {
   },
 
   clientUrl: process.env.CLIENT_URI,
+
+  twoFactorAppName: process.env.TWO_FACTOR_AUTHENTICATION_APP_NAME,
 };

@@ -11,7 +11,7 @@ import { LoggedUserResponse } from '../../types/loggedUserResponse';
 import NotAllowedException from '../../api/exceptions/notAllowedException';
 
 @Route('/auth')
-@Tags('Authorization')
+@Tags('Refresh tokens (JWT authentication with refresh tokens)')
 @Service()
 export default class Token extends Generic {
   constructor(

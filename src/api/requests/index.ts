@@ -5,6 +5,7 @@ import { tokenSchema } from './auth/token';
 import { loginSchema } from './auth/login';
 import { forgotSchema } from './auth/password/forgot';
 import { resetSchema } from './auth/password/reset';
+import { twoFACodeSchema } from './auth/twoFACode';
 
 export default {
   createItemSchema,
@@ -14,4 +15,5 @@ export default {
   loginSchema,
   forgotSchema,
   resetSchema,
+  twoFACodeSchema,
 };
