@@ -4,7 +4,9 @@
   "controllerPathGlobs": [
     "src/services/booking/rooms/room.ts",
     "src/services/users/user.ts",
-    "src/services/authToken/token.ts"
+    "src/services/users/auth/authentication.ts",
+    "src/services/authToken/token.ts",
+    "src/services/2FA/twoFactorAuth.ts"
   ],
   "spec": {
     "outputDirectory": "public",

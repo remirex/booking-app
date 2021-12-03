@@ -10,4 +10,10 @@ declare global {
     export type UserModel = Model<IUser & Document>;
     export type RefreshTokenModel = Model<IRefreshToken & Document>;
   }
+
+  namespace Express {
+    export interface Request {
+      currentUser: IUser & Document;
+    }
+  }
 }

@@ -12,6 +12,8 @@ export interface IUser {
   verified: number;
   role: string;
   status: string;
+  twoFactorAuthenticationCode: string;
+  isTwoFactorAuthenticationEnabled: boolean;
 }
 
 export interface IRefreshToken {
@@ -51,4 +53,15 @@ export interface IUserPasswordResetDTO {
   token: string;
   password: string;
   repeatPassword: string;
+}
+
+export interface IUserDataStoredInTokenDTO {
+  id: string;
+  role: string;
+  status: string;
+  isTwoFactorAuthenticated: boolean;
+}
+
+export interface IUser2FACodeDTO {
+  code: string;
 }

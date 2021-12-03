@@ -340,12 +340,16 @@
 					},
 					"refreshToken": {
 						"type": "string"
+					},
+					"isTwoFactorAuthenticationEnabled": {
+						"type": "boolean"
 					}
 				},
 				"required": [
 					"auth",
 					"jwtToken",
-					"refreshToken"
+					"refreshToken",
+					"isTwoFactorAuthenticationEnabled"
 				],
 				"type": "object",
 				"additionalProperties": false
@@ -394,6 +398,18 @@
 					"token",
 					"password",
 					"repeatPassword"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"IUser2FACodeDTO": {
+				"properties": {
+					"code": {
+						"type": "string"
+					}
+				},
+				"required": [
+					"code"
 				],
 				"type": "object",
 				"additionalProperties": false
@@ -485,15 +501,7 @@
 						"content": {
 							"application/json": {
 								"schema": {
-									"properties": {
-										"message": {
-											"type": "string"
-										}
-									},
-									"required": [
-										"message"
-									],
-									"type": "object"
+									"type": "boolean"
 								}
 							}
 						}
@@ -529,7 +537,7 @@
 					}
 				},
 				"tags": [
-					"Authorization"
+					"Authentication (Email sign up and verification & Forgot password and reset password functionality)"
 				],
 				"security": [],
 				"parameters": [],
@@ -554,15 +562,7 @@
 						"content": {
 							"application/json": {
 								"schema": {
-									"properties": {
-										"message": {
-											"type": "string"
-										}
-									},
-									"required": [
-										"message"
-									],
-									"type": "object"
+									"type": "boolean"
 								}
 							}
 						}
@@ -598,7 +598,7 @@
 					}
 				},
 				"tags": [
-					"Authorization"
+					"Authentication (Email sign up and verification & Forgot password and reset password functionality)"
 				],
 				"security": [],
 				"parameters": [],
@@ -659,7 +659,7 @@
 					}
 				},
 				"tags": [
-					"Authorization"
+					"Authentication (Email sign up and verification & Forgot password and reset password functionality)"
 				],
 				"security": [],
 				"parameters": [],
@@ -720,7 +720,7 @@
 					}
 				},
 				"tags": [
-					"Authorization"
+					"Authentication (Email sign up and verification & Forgot password and reset password functionality)"
 				],
 				"security": [],
 				"parameters": [],
@@ -749,10 +749,39 @@
 								}
 							}
 						}
+					},
+					"422": {
+						"description": "Validation Failed",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/ValidationErrorResponse"
+								},
+								"examples": {
+									"Example 1": {
+										"value": {
+											"name": "Validation Error.",
+											"message": "Some fields are not valid.",
+											"status": false,
+											"errors": [
+												{
+													"message": "password is not allowed to be empty",
+													"field": {
+														"label": "password",
+														"value": "",
+														"key": "password"
+													}
+												}
+											]
+										}
+									}
+								}
+							}
+						}
 					}
 				},
 				"tags": [
-					"Authorization"
+					"Authentication (Email sign up and verification & Forgot password and reset password functionality)"
 				],
 				"security": [],
 				"parameters": [],
@@ -814,7 +843,7 @@
 				},
 				"description": "Use a refresh token to generate a new JWT token and a new refresh token",
 				"tags": [
-					"Authorization"
+					"Refresh tokens (JWT authentication with refresh tokens)"
 				],
 				"security": [],
 				"parameters": [],
@@ -875,7 +904,7 @@
 					}
 				},
 				"tags": [
-					"Authorization"
+					"Refresh tokens (JWT authentication with refresh tokens)"
 				],
 				"security": [
 					{
@@ -889,6 +918,102 @@
 						"application/json": {
 							"schema": {
 								"$ref": "#/components/schemas/ITokenInputDTO"
+							}
+						}
+					}
+				}
+			}
+		},
+		"/auth/2fa/generate": {
+			"post": {
+				"operationId": "GenerateTwoFactorAuthenticationCode",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {}
+							}
+						}
+					}
+				},
+				"tags": [
+					"Two-Factor Authentication (2FA)"
+				],
+				"security": [
+					{
+						"jwt": []
+					}
+				],
+				"parameters": []
+			}
+		},
+		"/auth/2fa/turn-on": {
+			"post": {
+				"operationId": "TurnOnTwoFactorAuthentication",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "boolean"
+								}
+							}
+						}
+					}
+				},
+				"tags": [
+					"Two-Factor Authentication (2FA)"
+				],
+				"security": [
+					{
+						"jwt": []
+					}
+				],
+				"parameters": [],
+				"requestBody": {
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/IUser2FACodeDTO"
+							}
+						}
+					}
+				}
+			}
+		},
+		"/auth/2fa/authenticate": {
+			"post": {
+				"operationId": "SecondFactorAuthentication",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/LoggedUserResponse"
+								}
+							}
+						}
+					}
+				},
+				"tags": [
+					"Two-Factor Authentication (2FA)"
+				],
+				"security": [
+					{
+						"jwt": []
+					}
+				],
+				"parameters": [],
+				"requestBody": {
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/IUser2FACodeDTO"
 							}
 						}
 					}
