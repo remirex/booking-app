@@ -36,6 +36,11 @@ export default class Authentication extends Generic {
     super(userModel);
   }
 
+  /**
+   * Register a new user account and send a verification email.
+   * The first account registered in the system is assigned the `ADMIN` role, other accounts are assigned the `GUEST` role.
+   * @param registerData
+   */
   @Post('/register')
   @SuccessResponse('201', 'Created')
   @Response<ValidationErrorResponse>(422, 'Validation Failed', {
@@ -111,6 +116,10 @@ export default class Authentication extends Generic {
     return true;
   }
 
+  /**
+   * Verify a new account with a verification token received by email after registration
+   * @param tokenData
+   */
   @Post('/verify-email')
   @SuccessResponse('200', 'Verified')
   @Response<ValidationErrorResponse>(422, 'Validation Failed', {
@@ -146,6 +155,11 @@ export default class Authentication extends Generic {
     return true;
   }
 
+  /**
+   * Authenticate account credentials and return a JWT token and refresh token.
+   * @param loginData
+   * @param ipAddress
+   */
   @Post('/login')
   @SuccessResponse('200', 'LoggedIn')
   @Response<ValidationErrorResponse>(422, 'Validation Failed', {
@@ -192,6 +206,10 @@ export default class Authentication extends Generic {
     };
   }
 
+  /**
+   * Send a token to the email which will allow you to reset the password of the account
+   * @param data
+   */
   @Post('/forgot-password')
   @SuccessResponse('200', 'Email was sent')
   @Response<ValidationErrorResponse>(422, 'Validation Failed', {
@@ -230,6 +248,11 @@ export default class Authentication extends Generic {
     );
     return true;
   }
+
+  /**
+   * Password reset token received in the email from the forgot password step
+   * @param resetData
+   */
   @Post('/reset-password')
   @SuccessResponse('200', 'Password was successfully reset')
   @Response<ValidationErrorResponse>(422, 'Validation Failed', {
