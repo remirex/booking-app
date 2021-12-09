@@ -75,6 +75,13 @@ export default class Token extends Generic {
     };
   }
 
+  /**
+   * Revoke a refresh token.
+   * Admin users can revoke the tokens of any account, regular users can only revoke their own tokens.
+   * @param refreshTokenData
+   * @param ipAddress
+   * @param authHeader
+   */
   @Security('jwt')
   @Post('/revoke-token')
   @SuccessResponse('200', 'Revoked')

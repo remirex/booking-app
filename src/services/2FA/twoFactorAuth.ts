@@ -21,6 +21,13 @@ export default class TwoFactorAuth extends Generic {
   ) {
     super(userModel);
   }
+
+  /**
+   * Applications like the Google Authenticator allow users to add a page that they authenticate to either by manually entering a `key`, or scanning a `QR` code.
+   * QR code in writable stream in response object.
+   * @param userId
+   * @param response
+   */
   @Security('jwt')
   @Post('/2fa/generate')
   public async generateTwoFactorAuthenticationCode(@Request() userId: string, @Request() response: any) {
@@ -30,6 +37,11 @@ export default class TwoFactorAuth extends Generic {
     return qrcode.toFileStream(response, secretCode.otpauth_url!);
   }
 
+  /**
+   * We check if the provided `code` is valid. If that's the case, we enable the Two-Factor Authentication.
+   * @param data
+   * @param user
+   */
   @Security('jwt')
   @Post('/2fa/turn-on')
   public async turnOnTwoFactorAuthentication(@Body() data: IUser2FACodeDTO, @Request() user: IUser): Promise<boolean> {
@@ -42,6 +54,15 @@ export default class TwoFactorAuth extends Generic {
     return false;
   }
 
+  /**
+   * 1. The user attempts to log in using his `email` and a valid `password`, and we give him a JWT token.
+   *    - if he doesn't have the `2FA` turned on, this gives him full access.
+   *    - if he does have the `2FA` turned on, we provide him with access just to the /2fa/authenticate endpoint.
+   * 2. The user sends a valid code to the /2fa/authenticate endpoint and is given a new JWT token with full access.
+   * @param data
+   * @param user
+   * @param ipAddress
+   */
   @Security('jwt')
   @Post('/2fa/authenticate')
   public async secondFactorAuthentication(

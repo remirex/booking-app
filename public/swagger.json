@@ -908,6 +908,7 @@
 						}
 					}
 				},
+				"description": "Revoke a refresh token.\nAdmin users can revoke the tokens of any account, regular users can only revoke their own tokens.",
 				"tags": [
 					"Refresh tokens (JWT authentication with refresh tokens)"
 				],
@@ -942,6 +943,7 @@
 						}
 					}
 				},
+				"description": "Applications like the Google Authenticator allow users to add a page that they authenticate to either by manually entering a `key`, or scanning a `QR` code.\nQR code in writable stream in response object.",
 				"tags": [
 					"Two-Factor Authentication (2FA)"
 				],
@@ -968,6 +970,7 @@
 						}
 					}
 				},
+				"description": "We check if the provided `code` is valid. If that's the case, we enable the Two-Factor Authentication.",
 				"tags": [
 					"Two-Factor Authentication (2FA)"
 				],
@@ -1004,6 +1007,7 @@
 						}
 					}
 				},
+				"description": "1. The user attempts to log in using his `email` and a valid `password`, and we give him a JWT token.\n   - if he doesn't have the `2FA` turned on, this gives him full access.\n   - if he does have the `2FA` turned on, we provide him with access just to the /2fa/authenticate endpoint.\n2. The user sends a valid code to the /2fa/authenticate endpoint and is given a new JWT token with full access.",
 				"tags": [
 					"Two-Factor Authentication (2FA)"
 				],
