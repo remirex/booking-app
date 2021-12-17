@@ -35,6 +35,8 @@ export default ({ app }: { app: express.Application }) => {
   // Transforms the raw string of req.body into json
   app.use(express.json());
 
+  app.use('/images', express.static('public/uploads/images'));
+
   app.use(express.static('public'));
 
   // Swagger

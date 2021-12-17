@@ -27,6 +27,14 @@ const schema = new mongoose.Schema(
       type: String,
       required: true,
     },
+    avatar: {
+      type: String,
+      default: null,
+    },
+    file: {
+      type: String,
+      default: null,
+    },
     acceptTerms: {
       type: Boolean,
       required: true,

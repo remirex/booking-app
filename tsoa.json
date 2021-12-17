@@ -6,7 +6,8 @@
     "src/services/users/user.ts",
     "src/services/users/auth/authentication.ts",
     "src/services/authToken/token.ts",
-    "src/services/2FA/twoFactorAuth.ts"
+    "src/services/2FA/twoFactorAuth.ts",
+    "src/services/files/upload.ts"
   ],
   "spec": {
     "outputDirectory": "public",
