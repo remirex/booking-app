@@ -1,6 +1,9 @@
 import { NextFunction, Request, Response, Router } from 'express';
 import { Container } from 'typedi';
 import { Logger } from 'winston';
+import sharp from 'sharp';
+import path from 'path';
+import fs from 'fs';
 
 import FileService from '../../services/files/upload';
 import middleware from '../middleware';
@@ -21,8 +24,9 @@ export default (app: Router) => {
     async (req: Request, res: Response, next: NextFunction) => {
       logger.debug('Calling Upload Avatar endpoint');
       try {
+        await uploadMiddlewareInstance.resizeImage(req.file?.path, req.file?.filename, req.file?.destination);
         const fileName = req.file?.filename;
-        const basePath = `${req.protocol}://${req.get('host')}/public/uploads/images/`;
+        const basePath = `${req.protocol}://${req.get('host')}/public/uploads/images/resized`;
         const userId = req.params.id;
         const response = await fileServiceContainer.uploadAvatarImg(fileName, userId, basePath, req.file!);
         return res.status(200).json(response);
@@ -51,7 +55,7 @@ export default (app: Router) => {
       logger.debug('Calling Upload File endpoint');
       try {
         const fileName = req.file?.filename;
-        const basePath = `${req.protocol}://${req.get('host')}/public/uploads/`;
+        const basePath = `${req.protocol}://${req.get('host')}/public/uploads`;
         const userId = req.params.id;
         const response = await fileServiceContainer.uploadFile(fileName, userId, basePath, req.file!);
         return res.status(200).json(response);

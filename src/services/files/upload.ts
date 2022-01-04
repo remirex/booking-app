@@ -1,6 +1,6 @@
 import { Inject, Service } from 'typedi';
 import { unlink } from 'fs';
-import { Route, Tags, Put, Request, Path, UploadedFile, Security, Post } from 'tsoa';
+import { Route, Tags, Put, Request, Path, UploadedFile, Security } from 'tsoa';
 
 import Generic from '../generic';
 
@@ -28,23 +28,23 @@ export default class FileService extends Generic {
     @UploadedFile() avatar: Express.Multer.File,
   ) {
     const user = await this.getById(userId);
-    const toUpdate = { avatar: basePath + '' + fileName };
-    await this.update(userId, toUpdate, false, false);
     // unlink old file
     const img = user.avatar ? user.avatar : '';
     const separator = '/';
     const oldFile = splitString(img, separator);
-    console.log('oldFile: ', oldFile);
-    unlink(`public/uploads/images/${oldFile}`, err => {
+    unlink(`public/uploads/images/resized/${oldFile}`, err => {
       if (err) this.logger.error(err);
       this.logger.info(`Deleted file: ${oldFile}`);
     });
+
+    const toUpdate = { avatar: basePath + '/' + fileName };
+    await this.update(userId, toUpdate, false, false);
 
     return true;
   }
 
   @Security('jwt')
-  @Post('/user/upload-file/{userId}')
+  @Put('/user/upload-file/{userId}')
   public async uploadFile(
     @Request() fileName: any,
     @Path() userId: string,
@@ -52,12 +52,12 @@ export default class FileService extends Generic {
     @UploadedFile() file: Express.Multer.File,
   ) {
     const user = await this.getById(userId);
-    const toUpdate = { file: basePath + '' + fileName };
+    const toUpdate = { file: basePath + '/' + fileName };
     await this.update(userId, toUpdate, false, false);
     // unlink old file
-    const img = user.avatar ? user.avatar : '';
+    const docs = user.file ? user.file : '';
     const separator = '/';
-    const oldFile = splitString(img, separator);
+    const oldFile = splitString(docs, separator);
     console.log('oldFile: ', oldFile);
     unlink(`public/uploads/${oldFile}`, err => {
       if (err) this.logger.error(err);

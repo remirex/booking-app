@@ -1085,7 +1085,7 @@
 			}
 		},
 		"/user/upload-file/{userId}": {
-			"post": {
+			"put": {
 				"operationId": "UploadFile",
 				"responses": {
 					"200": {

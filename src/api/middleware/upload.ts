@@ -3,6 +3,9 @@ import { Request } from 'express';
 import multer, { StorageEngine, Multer } from 'multer';
 import { resolve } from 'path';
 import * as crypto from 'crypto';
+import sharp from 'sharp';
+import path from 'path';
+import fs from 'fs';
 
 @Service()
 export default class Upload {
@@ -40,7 +43,16 @@ export default class Upload {
     }) as Multer;
   }
 
-  public async resizeImage(req: Request) {
-    req.body.images = [];
+  public async resizeImage(
+    filePath: string | undefined,
+    fileName: string | undefined,
+    destination: string | undefined,
+  ) {
+    await sharp(filePath)
+      .resize(200, 200)
+      .toFormat('png')
+      .png({ quality: 90 })
+      .toFile(path.resolve(destination!, 'resized', fileName!));
+    fs.unlinkSync(filePath!);
   }
 }
