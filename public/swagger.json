@@ -1099,6 +1099,7 @@
 						}
 					}
 				},
+				"description": "Upload file (pdf, csv, xlsx)",
 				"tags": [
 					"Files"
 				],
@@ -1136,6 +1137,25 @@
 						}
 					}
 				}
+			}
+		},
+		"/user/upload-files/{userId}": {
+			"put": {
+				"operationId": "UploadFiles",
+				"responses": {
+					"204": {
+						"description": "No content"
+					}
+				},
+				"tags": [
+					"Files"
+				],
+				"security": [
+					{
+						"jwt": []
+					}
+				],
+				"parameters": []
 			}
 		}
 	},

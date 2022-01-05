@@ -43,6 +43,13 @@ export default class FileService extends Generic {
     return true;
   }
 
+  /**
+   * Upload file (pdf, csv, xlsx)
+   * @param fileName
+   * @param userId
+   * @param basePath
+   * @param file
+   */
   @Security('jwt')
   @Put('/user/upload-file/{userId}')
   public async uploadFile(
@@ -66,6 +73,10 @@ export default class FileService extends Generic {
 
     return true;
   }
+
+  @Security('jwt')
+  @Put('/user/upload-files/{userId}')
+  public async uploadFiles() {}
 }
 
 function splitString(str: string, separator: string) {
