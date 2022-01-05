@@ -3,8 +3,8 @@ import { Container } from 'typedi';
 import { Logger } from 'winston';
 
 import FileService from '../../services/files/upload';
-import middleware from '../middleware';
 import Upload from '../middleware/upload';
+import Auth from '../middleware/auth';
 
 const route = Router();
 
@@ -13,19 +13,24 @@ export default (app: Router) => {
 
   const fileServiceContainer = Container.get(FileService);
   const uploadMiddlewareInstance = Container.get(Upload);
+  const authMiddlewareInstance = Container.get(Auth);
   const logger: Logger = Container.get('logger');
 
   route.put(
     '/upload-avatar/:id',
-    middleware.imageUpload.single('avatar'),
-    //middleware.resizeImage,
+    authMiddlewareInstance.authMiddleware(),
+    uploadMiddlewareInstance.uploadImage().single('avatar'),
     async (req: Request, res: Response, next: NextFunction) => {
       logger.debug('Calling Upload Avatar endpoint');
       try {
-        //await middleware.resizeImage(req.file?.path, req.file?.filename, req.file?.destination);
+        const filePath = req.file?.path;
         const fileName = req.file?.filename;
-        const basePath = `${req.protocol}://${req.get('host')}/public/uploads/images/resized`;
+        const fileDestination = req.file?.destination;
         const userId = req.params.id;
+        const basePath = `${req.protocol}://${req.get('host')}/public/uploads/images/resized`;
+
+        await uploadMiddlewareInstance.resizeImage(filePath, fileName, fileDestination);
+
         const response = await fileServiceContainer.uploadAvatarImg(fileName, userId, basePath, req.file!);
         return res.status(200).json(response);
       } catch (err) {
@@ -36,8 +41,10 @@ export default (app: Router) => {
   );
   route.post(
     '/upload-multiple',
+    authMiddlewareInstance.authMiddleware(),
     uploadMiddlewareInstance.uploadImage(true, 3).array('images', 3),
     async (req: Request, res: Response, next: NextFunction) => {
+      logger.debug('Calling Upload Multiple File endpoint');
       try {
         return res.status(200).json(true);
       } catch (err) {
@@ -48,7 +55,8 @@ export default (app: Router) => {
   );
   route.put(
     '/upload-file/:id',
-    middleware.fileUpload.single('file'),
+    authMiddlewareInstance.authMiddleware(),
+    uploadMiddlewareInstance.uploadFile().single('file'),
     async (req: Request, res: Response, next: NextFunction) => {
       logger.debug('Calling Upload File endpoint');
       try {

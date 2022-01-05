@@ -15,11 +15,11 @@ export default class Upload {
         if (!file) {
           done(new Error('Upload file error.'), null!);
         } else {
-          done(null, resolve(process.cwd(), 'public/uploads/images'));
+          done(null, 'public/uploads/images/');
         }
       },
       filename: (req: any, file: Express.Multer.File, done) => {
-        const fileName = `${Date.now()}-${crypto.randomBytes(2).toString('hex')}-${file.originalname}`;
+        const fileName = file.fieldname + '-' + Date.now() + '-' + crypto.randomBytes(2).toString('hex') + path.extname(file.originalname);
         done(null, fileName);
       },
     });
@@ -43,6 +43,39 @@ export default class Upload {
     }) as Multer;
   }
 
+  public uploadFile(isMultiple = false, size?: number) {
+    const diskStorage: StorageEngine = multer.diskStorage({
+      destination: (req: Request, file: Express.Multer.File, done): void => {
+        if (!file) {
+          done(new Error('Upload file error.'), null!);
+        } else {
+          done(null, 'public/uploads/');
+        }
+      },
+      filename: (req: any, file: Express.Multer.File, done) => {
+        const fileName = file.fieldname + '-' + Date.now() + '-' + crypto.randomBytes(2).toString('hex') + path.extname(file.originalname);
+        done(null, fileName);
+      },
+    });
+
+    const fileValidator = (req: any, file: Express.Multer.File, done) => {
+      const extFile = file.originalname.replace('.', '');
+      const extPattern = /(pdf|csv|xlsx)/gi.test(extFile);
+
+      if (!extPattern) {
+        done(new TypeError('File format is not valid'), null);
+      } else {
+        done(null, true);
+      }
+    };
+
+    return multer({
+      storage: diskStorage,
+      limits: { fileSize: 1000000 },
+      fileFilter: fileValidator,
+    }) as Multer;
+  }
+
   public async resizeImage(
     filePath: string | undefined,
     fileName: string | undefined,
@@ -50,8 +83,7 @@ export default class Upload {
   ) {
     await sharp(filePath)
       .resize(200, 200)
-      .toFormat('png')
-      .png({ quality: 90 })
+      .jpeg({ quality: 90 })
       .toFile(path.resolve(destination!, 'resized', fileName!));
     fs.unlinkSync(filePath!);
   }

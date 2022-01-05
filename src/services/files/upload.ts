@@ -76,7 +76,9 @@ export default class FileService extends Generic {
 
   @Security('jwt')
   @Put('/user/upload-files/{userId}')
-  public async uploadFiles() {}
+  public async uploadFiles() {
+
+  }
 }
 
 function splitString(str: string, separator: string) {
