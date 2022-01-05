@@ -1,9 +1,6 @@
 import { NextFunction, Request, Response, Router } from 'express';
 import { Container } from 'typedi';
 import { Logger } from 'winston';
-import sharp from 'sharp';
-import path from 'path';
-import fs from 'fs';
 
 import FileService from '../../services/files/upload';
 import middleware from '../middleware';
@@ -20,11 +17,12 @@ export default (app: Router) => {
 
   route.put(
     '/upload-avatar/:id',
-    uploadMiddlewareInstance.uploadImage().single('avatar'),
+    middleware.imageUpload.single('avatar'),
+    //middleware.resizeImage,
     async (req: Request, res: Response, next: NextFunction) => {
       logger.debug('Calling Upload Avatar endpoint');
       try {
-        await uploadMiddlewareInstance.resizeImage(req.file?.path, req.file?.filename, req.file?.destination);
+        //await middleware.resizeImage(req.file?.path, req.file?.filename, req.file?.destination);
         const fileName = req.file?.filename;
         const basePath = `${req.protocol}://${req.get('host')}/public/uploads/images/resized`;
         const userId = req.params.id;
@@ -50,7 +48,7 @@ export default (app: Router) => {
   );
   route.put(
     '/upload-file/:id',
-    middleware.fileUpload2.single('file'),
+    middleware.fileUpload.single('file'),
     async (req: Request, res: Response, next: NextFunction) => {
       logger.debug('Calling Upload File endpoint');
       try {

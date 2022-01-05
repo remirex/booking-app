@@ -1,8 +1,9 @@
 import validation from './validation';
-import { fileUpload, fileUpload2 } from './multer';
+import { fileUpload, imageUpload, resizeImage } from './multer';
 
 export default {
   validation,
   fileUpload,
-  fileUpload2,
+  imageUpload,
+  resizeImage,
 };
