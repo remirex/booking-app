@@ -40,12 +40,13 @@ export default (app: Router) => {
     },
   );
   route.post(
-    '/upload-multiple',
+    '/upload-files/:id',
     authMiddlewareInstance.authMiddleware(),
-    uploadMiddlewareInstance.uploadImage(true, 3).array('images', 3),
+    uploadMiddlewareInstance.uploadImage(true, 3).array('files', 3),
     async (req: Request, res: Response, next: NextFunction) => {
       logger.debug('Calling Upload Multiple File endpoint');
       try {
+        await fileServiceContainer.uploadFiles(req.params.id, req.files!);
         return res.status(200).json(true);
       } catch (err) {
         logger.error('🔥 error: %o', err);

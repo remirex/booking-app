@@ -1140,7 +1140,7 @@
 			}
 		},
 		"/user/upload-files/{userId}": {
-			"put": {
+			"post": {
 				"operationId": "UploadFiles",
 				"responses": {
 					"204": {
@@ -1155,7 +1155,38 @@
 						"jwt": []
 					}
 				],
-				"parameters": []
+				"parameters": [
+					{
+						"in": "path",
+						"name": "userId",
+						"required": true,
+						"schema": {
+							"type": "string"
+						}
+					}
+				],
+				"requestBody": {
+					"required": true,
+					"content": {
+						"multipart/form-data": {
+							"schema": {
+								"type": "object",
+								"properties": {
+									"images": {
+										"items": {
+											"type": "string",
+											"format": "binary"
+										},
+										"type": "array"
+									}
+								},
+								"required": [
+									"images"
+								]
+							}
+						}
+					}
+				}
 			}
 		}
 	},

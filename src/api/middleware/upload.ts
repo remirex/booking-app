@@ -19,7 +19,13 @@ export default class Upload {
         }
       },
       filename: (req: any, file: Express.Multer.File, done) => {
-        const fileName = file.fieldname + '-' + Date.now() + '-' + crypto.randomBytes(2).toString('hex') + path.extname(file.originalname);
+        const fileName =
+          file.fieldname +
+          '-' +
+          Date.now() +
+          '-' +
+          crypto.randomBytes(2).toString('hex') +
+          path.extname(file.originalname);
         done(null, fileName);
       },
     });
@@ -53,7 +59,13 @@ export default class Upload {
         }
       },
       filename: (req: any, file: Express.Multer.File, done) => {
-        const fileName = file.fieldname + '-' + Date.now() + '-' + crypto.randomBytes(2).toString('hex') + path.extname(file.originalname);
+        const fileName =
+          file.fieldname +
+          '-' +
+          Date.now() +
+          '-' +
+          crypto.randomBytes(2).toString('hex') +
+          path.extname(file.originalname);
         done(null, fileName);
       },
     });
