@@ -1,6 +1,6 @@
 import { Inject, Service } from 'typedi';
 import { unlink } from 'fs';
-import { Route, Tags, Put, Request, Path, UploadedFile, Security } from 'tsoa';
+import { Route, Tags, Put, Request, Path, UploadedFile, UploadedFiles, Security, Post } from 'tsoa';
 
 import Generic from '../generic';
 
@@ -75,8 +75,15 @@ export default class FileService extends Generic {
   }
 
   @Security('jwt')
-  @Put('/user/upload-files/{userId}')
-  public async uploadFiles() {}
+  @Post('/user/upload-files/{userId}')
+  public async uploadFiles(
+    //@Request() fileName: any,
+    @Path() userId: string,
+    //@Request() basePath: string,
+    @UploadedFiles() files: { [p: string]: Express.Multer.File[] } | Express.Multer.File[] | undefined,
+  ) {
+    console.log(files);
+  }
 }
 
 function splitString(str: string, separator: string) {
