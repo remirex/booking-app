@@ -46,7 +46,8 @@ export default (app: Router) => {
     async (req: Request, res: Response, next: NextFunction) => {
       logger.debug('Calling Upload Multiple File endpoint');
       try {
-        await fileServiceContainer.uploadFiles(req.params.id, req.files!);
+        const baseHost = `${req.protocol}://${req.get('host')}`;
+        await fileServiceContainer.uploadFiles(req.params.id, baseHost, req.files!);
         return res.status(200).json(true);
       } catch (err) {
         logger.error('🔥 error: %o', err);

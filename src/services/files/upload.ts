@@ -8,7 +8,11 @@ import Generic from '../generic';
 @Route('/')
 @Service()
 export default class FileService extends Generic {
-  constructor(@Inject('userModel') private userModel: Models.UserModel, @Inject('logger') private logger) {
+  constructor(
+    @Inject('userModel') private userModel: Models.UserModel,
+    @Inject('uploadModel') private uploadModel: Models.UploadModel,
+    @Inject('logger') private logger,
+  ) {
     super(userModel);
   }
 
@@ -77,12 +81,18 @@ export default class FileService extends Generic {
   @Security('jwt')
   @Post('/user/upload-files/{userId}')
   public async uploadFiles(
-    //@Request() fileName: any,
     @Path() userId: string,
-    //@Request() basePath: string,
+    @Request() host: string,
     @UploadedFiles() files: { [p: string]: Express.Multer.File[] } | Express.Multer.File[] | undefined,
   ) {
-    console.log(files);
+    const propertyValues = Object.values(files!);
+    for (const file of propertyValues) {
+      // save img into db
+      await this.uploadModel.create({
+        owner: userId,
+        path: host + '/' + file.path
+      });
+    }
   }
 }
 
