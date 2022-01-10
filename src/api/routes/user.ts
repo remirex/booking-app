@@ -3,6 +3,7 @@ import { Container } from 'typedi';
 import { Logger } from 'winston';
 
 import FileService from '../../services/files/upload';
+import UserService from '../../services/users/user';
 import Upload from '../middleware/upload';
 import Auth from '../middleware/auth';
 
@@ -12,12 +13,13 @@ export default (app: Router) => {
   app.use('/user', route);
 
   const fileServiceContainer = Container.get(FileService);
+  const userServiceContainer = Container.get(UserService);
   const uploadMiddlewareInstance = Container.get(Upload);
   const authMiddlewareInstance = Container.get(Auth);
   const logger: Logger = Container.get('logger');
 
   route.put(
-    '/upload-avatar/:id',
+    '/avatar/:id',
     authMiddlewareInstance.authMiddleware(),
     uploadMiddlewareInstance.uploadImage().single('avatar'),
     async (req: Request, res: Response, next: NextFunction) => {
@@ -31,7 +33,7 @@ export default (app: Router) => {
 
         await uploadMiddlewareInstance.resizeImage(filePath, fileName, fileDestination);
 
-        const response = await fileServiceContainer.uploadAvatarImg(fileName, userId, basePath, req.file!);
+        const response = await userServiceContainer.uploadAvatar(fileName, userId, basePath, req.file!);
         return res.status(200).json(response);
       } catch (err) {
         logger.error('🔥 error: %o', err);
@@ -40,7 +42,7 @@ export default (app: Router) => {
     },
   );
   route.post(
-    '/upload-files/:id',
+    '/upload/files/:id',
     authMiddlewareInstance.authMiddleware(),
     uploadMiddlewareInstance.uploadImage(true, 3).array('files', 3),
     async (req: Request, res: Response, next: NextFunction) => {
@@ -56,7 +58,7 @@ export default (app: Router) => {
     },
   );
   route.put(
-    '/upload-file/:id',
+    '/upload/file/:id',
     authMiddlewareInstance.authMiddleware(),
     uploadMiddlewareInstance.uploadFile().single('file'),
     async (req: Request, res: Response, next: NextFunction) => {
@@ -65,7 +67,8 @@ export default (app: Router) => {
         const fileName = req.file?.filename;
         const basePath = `${req.protocol}://${req.get('host')}/public/uploads`;
         const userId = req.params.id;
-        const response = await fileServiceContainer.uploadFile(fileName, userId, basePath, req.file!);
+        //const response = await fileServiceContainer.uploadFile(fileName, userId, basePath, req.file!);
+        const response = await userServiceContainer.uploadFile(fileName, userId, basePath, req.file!);
         return res.status(200).json(response);
       } catch (err) {
         logger.error('🔥 error: %o', err);

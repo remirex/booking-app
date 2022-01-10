@@ -89,9 +89,9 @@ export default class Upload {
   }
 
   public async resizeImage(
-    filePath: string | undefined,
-    fileName: string | undefined,
-    destination: string | undefined,
+    filePath?: string | undefined,
+    fileName?: string | undefined,
+    destination?: string | undefined,
   ) {
     await sharp(filePath)
       .resize(200, 200)
