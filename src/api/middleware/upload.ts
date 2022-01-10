@@ -1,7 +1,6 @@
 import { Service } from 'typedi';
 import { Request } from 'express';
 import multer, { StorageEngine, Multer } from 'multer';
-import { resolve } from 'path';
 import * as crypto from 'crypto';
 import sharp from 'sharp';
 import path from 'path';
@@ -49,7 +48,7 @@ export default class Upload {
     }) as Multer;
   }
 
-  public uploadFile(isMultiple = false, size?: number) {
+  public uploadFile(  isMultiple = false, size?: number) {
     const diskStorage: StorageEngine = multer.diskStorage({
       destination: (req: Request, file: Express.Multer.File, done): void => {
         if (!file) {
@@ -89,9 +88,9 @@ export default class Upload {
   }
 
   public async resizeImage(
-    filePath?: string | undefined,
-    fileName?: string | undefined,
-    destination?: string | undefined,
+    filePath: string | undefined,
+    fileName: string | undefined,
+    destination: string | undefined,
   ) {
     await sharp(filePath)
       .resize(200, 200)
