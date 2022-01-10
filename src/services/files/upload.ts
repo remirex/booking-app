@@ -1,6 +1,8 @@
 import { Inject, Service } from 'typedi';
-import { unlink } from 'fs';
-import { Route, Tags, Put, Request, Path, UploadedFile, UploadedFiles, Security, Post } from 'tsoa';
+import { Route, Tags, Request, Path, UploadedFiles, Security, Post } from 'tsoa';
+import sharp from 'sharp';
+import path from 'path';
+import fs from 'fs';
 
 import Generic from '../generic';
 
@@ -16,70 +18,8 @@ export default class FileService extends Generic {
     super(userModel);
   }
 
-  /**
-   * Upload User Avatar
-   * @param fileName
-   * @param userId
-   * @param basePath
-   * @param avatar
-   */
   @Security('jwt')
-  @Put('/user/upload-avatar/{userId}')
-  public async uploadAvatarImg(
-    @Request() fileName: any,
-    @Path() userId: string,
-    @Request() basePath: string,
-    @UploadedFile() avatar: Express.Multer.File,
-  ) {
-    const user = await this.getById(userId);
-    // unlink old file
-    const img = user.avatar ? user.avatar : '';
-    const separator = '/';
-    const oldFile = splitString(img, separator);
-    unlink(`public/uploads/images/resized/${oldFile}`, err => {
-      if (err) this.logger.error(err);
-      this.logger.info(`Deleted file: ${oldFile}`);
-    });
-
-    const toUpdate = { avatar: basePath + '/' + fileName };
-    await this.update(userId, toUpdate, false, false);
-
-    return true;
-  }
-
-  /**
-   * Upload file (pdf, csv, xlsx)
-   * @param fileName
-   * @param userId
-   * @param basePath
-   * @param file
-   */
-  @Security('jwt')
-  @Put('/user/upload-file/{userId}')
-  public async uploadFile(
-    @Request() fileName: any,
-    @Path() userId: string,
-    @Request() basePath: string,
-    @UploadedFile() file: Express.Multer.File,
-  ) {
-    const user = await this.getById(userId);
-    const toUpdate = { file: basePath + '/' + fileName };
-    await this.update(userId, toUpdate, false, false);
-    // unlink old file
-    const docs = user.file ? user.file : '';
-    const separator = '/';
-    const oldFile = splitString(docs, separator);
-    console.log('oldFile: ', oldFile);
-    unlink(`public/uploads/${oldFile}`, err => {
-      if (err) this.logger.error(err);
-      this.logger.info(`Deleted file: ${oldFile}`);
-    });
-
-    return true;
-  }
-
-  @Security('jwt')
-  @Post('/user/upload-files/{userId}')
+  @Post('/user/upload/files/{userId}')
   public async uploadFiles(
     @Path() userId: string,
     @Request() host: string,
@@ -87,10 +27,15 @@ export default class FileService extends Generic {
   ) {
     const propertyValues = Object.values(files!);
     for (const file of propertyValues) {
+      await sharp(file.path)
+        .resize(200, 200)
+        .jpeg({ quality: 90 })
+        .toFile(path.resolve(file.destination, 'resized', file.filename));
+      fs.unlinkSync(file.path);
       // save img into db
       await this.uploadModel.create({
         owner: userId,
-        path: host + '/' + file.path
+        path: host + '/' + file.path,
       });
     }
   }

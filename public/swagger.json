@@ -492,6 +492,116 @@
 				}
 			}
 		},
+		"/user/avatar/{userId}": {
+			"put": {
+				"operationId": "UploadAvatar",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "boolean"
+								}
+							}
+						}
+					}
+				},
+				"description": "Upload User Avatar",
+				"tags": [
+					"User"
+				],
+				"security": [
+					{
+						"jwt": []
+					}
+				],
+				"parameters": [
+					{
+						"in": "path",
+						"name": "userId",
+						"required": true,
+						"schema": {
+							"type": "string"
+						}
+					}
+				],
+				"requestBody": {
+					"required": true,
+					"content": {
+						"multipart/form-data": {
+							"schema": {
+								"type": "object",
+								"properties": {
+									"avatar": {
+										"type": "string",
+										"format": "binary"
+									}
+								},
+								"required": [
+									"avatar"
+								]
+							}
+						}
+					}
+				}
+			}
+		},
+		"/user/upload/file/{userId}": {
+			"put": {
+				"operationId": "UploadFile",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "boolean"
+								}
+							}
+						}
+					}
+				},
+				"description": "Upload file (pdf, csv, xlsx)",
+				"tags": [
+					"User"
+				],
+				"security": [
+					{
+						"jwt": []
+					}
+				],
+				"parameters": [
+					{
+						"in": "path",
+						"name": "userId",
+						"required": true,
+						"schema": {
+							"type": "string"
+						}
+					}
+				],
+				"requestBody": {
+					"required": true,
+					"content": {
+						"multipart/form-data": {
+							"schema": {
+								"type": "object",
+								"properties": {
+									"file": {
+										"type": "string",
+										"format": "binary"
+									}
+								},
+								"required": [
+									"file"
+								]
+							}
+						}
+					}
+				}
+			}
+		},
 		"/auth/register": {
 			"post": {
 				"operationId": "Register",
@@ -1029,117 +1139,7 @@
 				}
 			}
 		},
-		"/user/upload-avatar/{userId}": {
-			"put": {
-				"operationId": "UploadAvatarImg",
-				"responses": {
-					"200": {
-						"description": "Ok",
-						"content": {
-							"application/json": {
-								"schema": {
-									"type": "boolean"
-								}
-							}
-						}
-					}
-				},
-				"description": "Upload User Avatar",
-				"tags": [
-					"Files"
-				],
-				"security": [
-					{
-						"jwt": []
-					}
-				],
-				"parameters": [
-					{
-						"in": "path",
-						"name": "userId",
-						"required": true,
-						"schema": {
-							"type": "string"
-						}
-					}
-				],
-				"requestBody": {
-					"required": true,
-					"content": {
-						"multipart/form-data": {
-							"schema": {
-								"type": "object",
-								"properties": {
-									"avatar": {
-										"type": "string",
-										"format": "binary"
-									}
-								},
-								"required": [
-									"avatar"
-								]
-							}
-						}
-					}
-				}
-			}
-		},
-		"/user/upload-file/{userId}": {
-			"put": {
-				"operationId": "UploadFile",
-				"responses": {
-					"200": {
-						"description": "Ok",
-						"content": {
-							"application/json": {
-								"schema": {
-									"type": "boolean"
-								}
-							}
-						}
-					}
-				},
-				"description": "Upload file (pdf, csv, xlsx)",
-				"tags": [
-					"Files"
-				],
-				"security": [
-					{
-						"jwt": []
-					}
-				],
-				"parameters": [
-					{
-						"in": "path",
-						"name": "userId",
-						"required": true,
-						"schema": {
-							"type": "string"
-						}
-					}
-				],
-				"requestBody": {
-					"required": true,
-					"content": {
-						"multipart/form-data": {
-							"schema": {
-								"type": "object",
-								"properties": {
-									"file": {
-										"type": "string",
-										"format": "binary"
-									}
-								},
-								"required": [
-									"file"
-								]
-							}
-						}
-					}
-				}
-			}
-		},
-		"/user/upload-files/{userId}": {
+		"/user/upload/files/{userId}": {
 			"post": {
 				"operationId": "UploadFiles",
 				"responses": {
